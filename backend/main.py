@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from core.config import settings
 from db.session import engine
 from db.base_class import Base
-from router.base import api_router
+from service.base import api_router
 
 
 def create_tables():

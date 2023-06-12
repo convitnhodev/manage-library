@@ -2,7 +2,7 @@ from passlib.context import CryptContext
 
 pwt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-class Hahser():
+class Hasher():
     @staticmethod
     def verify_password(plain_password, hash_password):
         return pwt_context.verify(plain_password, hash_password)

@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from schemas.users import UserCreate
 from db.models.users import User
-from core.hashing import Hahser
+from core.hashing import Hasher
 
 
 
@@ -14,7 +14,7 @@ def create_new_user(user: UserCreate, db:Session):
         dob = user.dob,
         address = user.address,
         email = user.email,
-        password = Hahser.get_password_hash(user.password),
+        password = Hasher.get_password_hash(user.password),
         is_active = True,
         is_supperuser = False,
         owner = "1"

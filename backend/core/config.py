@@ -10,6 +10,12 @@ load_dotenv(dotenv_path=env_path)
 class Settings: 
     PROJECT_TITLE: str = "Project Title"
     PROJECT_VERSION: str = "0.0.1"
+
+    SECRET_KEY: str = "convitnhodev"
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRATION_EXPIRE = 30 
+
+
     
     MYSQL_USER: str = os.getenv("MYSQL_USER")
     MYSQL_PASSWORD: str = os.getenv("MYSQL_PASSWORD")
