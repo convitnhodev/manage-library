@@ -15,3 +15,4 @@ class Card(Base):
     expires_at = Column(Date, nullable=True)
     created_by = Column(String(50), nullable=True)
     updated_by = Column(String(50), nullable=True)
+    owner = Column(String(50), nullable=True)

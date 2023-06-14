@@ -32,7 +32,7 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm=Depends(),
                             detail="Incorrect username or password")
     
     access_token_expire = timedelta(minutes = settings.ACCESS_TOKEN_EXPIRATION_EXPIRE)
-    access_token = create_access_token(data={"sub" : user.email, "owner" : user.owner}, expires_delta=access_token_expire)
+    access_token = create_access_token(data={"sub" : user.username, "owner" : user.owner}, expires_delta=access_token_expire)
     return {"access_token": access_token, "token_type": "bearer"}
 
 
