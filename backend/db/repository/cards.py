@@ -6,7 +6,6 @@ from db.models.cards import Card
 import uuid
 
 
-
 def create_new_card(card: CardCreate, db:Session): 
     card = Card(
         id = str(uuid.uuid4()),

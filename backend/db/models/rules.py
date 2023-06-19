@@ -13,6 +13,7 @@ class Rule(Base):
     detail_category = Column(JSON, nullable=False)
     max_day_borrow = Column(Integer, nullable=False)
     max_items_borrow = Column(Integer, nullable=False)
+    created_at = Column(DateTime, nullable=True)
 
 
 
