@@ -38,6 +38,12 @@ def list_cards_by_type_card(card_type: str, db: Session):
     return cards
 
 
+def get_card_by_owner(owner: str, db: Session):
+    card = db.query(Card).filter(Card.owner == owner).first()
+    return card
+
+
+
 
 
 

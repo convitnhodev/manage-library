@@ -6,8 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="e86f73ce-b9bf-4101-ba33-208614eb15f6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/db/models/rules.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db/models/rules.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/db/repository/cards.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db/repository/cards.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/db/repository/rules.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db/repository/rules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/db/repository/users.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/db/repository/users.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/schemas/rules.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/schemas/rules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service/router_rules.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/router_rules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service/router_users.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/router_users.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,19 +27,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/convitnhodev/Documents/managelibrary&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/home/convitnhodev/Documents/example-fastapi",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="managelibrary" />
@@ -76,6 +81,8 @@
       <workItem from="1686653038683" duration="426000" />
       <workItem from="1687172843546" duration="102000" />
       <workItem from="1687172964456" duration="82000" />
+      <workItem from="1687293710398" duration="18000" />
+      <workItem from="1687295199827" duration="122000" />
     </task>
     <servers />
   </component>

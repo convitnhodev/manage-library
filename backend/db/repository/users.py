@@ -6,7 +6,7 @@ from core.hashing import Hasher
 
 
 
-def create_new_user(user: UserCreate, db:Session): 
+def create_new_user(user: UserCreate, db:Session, owner: str): 
     user = User (
         name = user.name,
         username = user.username, 
@@ -17,7 +17,7 @@ def create_new_user(user: UserCreate, db:Session):
         password = Hasher.get_password_hash(user.password),
         is_active = True,
         is_supperuser = False,
-        owner = "1"
+        owner = owner
     )
 
     db.add(user)
