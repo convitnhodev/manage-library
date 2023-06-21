@@ -1,6 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, EmailStr
 from enum import  Enum
+from datetime import datetime
 
 class TypeCard(str, Enum):
     ACTIVE = "active"
@@ -9,9 +10,10 @@ class TypeCard(str, Enum):
 
 
 class CardCreate(BaseModel): 
+    age: int
     name: str 
     type: TypeCard
-    dob: str
+    dob: datetime
     address: str
     email: EmailStr
     

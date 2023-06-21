@@ -7,15 +7,25 @@ from db.session import get_db
 from db.repository.cards import create_new_card, get_card_by_id, get_card_by_name
 from db.repository.cards import list_cards_by_type_card
 
-from service.router_login import get_current_user_from_token
+from router.router_login import get_current_user_from_token
 from db.models.users import User
+from biz.card import is_card_valid
 
 
 router = APIRouter()
 
 @router.post("/new")
 def create_card(card: CardCreate, db: Session = Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
-    card = create_new_card(card, db)
+    try: 
+        checked = is_card_valid(card=card, db=db, owner=current_user.owner)
+
+        if checked != True:
+            err = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                          detail= checked)
+            raise err
+        card = create_new_card(card, db)
+    except :
+        raise err
     return card
 
 

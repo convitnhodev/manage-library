@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from schemas.rules import RuleCreate, RuleShow
 from db.session import get_db
 from db.models.users import User
-from service.router_login import get_current_user_from_token
+from router.router_login import get_current_user_from_token
 from db.repository.rules import get_rule_by_owner, create_rule_by_owner
 from biz.rule import ConvertRuleFromDBToShow
 

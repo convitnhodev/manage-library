@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 
-from service import router_cards
-from service import router_users
-from service import router_login
-from service import router_rules
+from router import router_cards
+from router import router_users
+from router import router_login
+from router import router_rules
 
 api_router = APIRouter()
 

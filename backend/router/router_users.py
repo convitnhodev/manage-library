@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from schemas.users import UserCreate, UserShow
 from db.session import get_db
 from db.models.users import User
-from service.router_login import get_current_user_from_token
+from router.router_login import get_current_user_from_token
 from db.repository.users import create_new_user
 
 

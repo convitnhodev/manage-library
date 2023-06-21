@@ -13,6 +13,7 @@ class RuleBase(BaseModel):
     distance_year: Optional[int] = 100
     created_at: Optional[date] = datetime.now().date()
     detail_type: List[str] = None
+    owner: List[str] = None
 
 
 class RuleCreate(RuleBase): 
@@ -37,6 +38,7 @@ class RuleShow(RuleBase):
     max_day_borrow: int
     max_items_borrow: int 
     distance_year: int 
+    owner: str
     
 
     class Config(): 

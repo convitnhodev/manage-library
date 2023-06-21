@@ -13,8 +13,8 @@ def ConvertRuleFromDBToShow(rule: Rule):
         distance_year = rule.distance_year,
         max_items_borrow = rule.max_items_borrow,
         detail_category = json.loads(rule.detail_category), 
-        detail_type = json.loads(rule.detail_type)
-
+        detail_type = json.loads(rule.detail_type), 
+        owner = rule.owner
     )
     return show
 

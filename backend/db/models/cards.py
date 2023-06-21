@@ -7,7 +7,7 @@ class Card(Base):
     id = Column(String(50), primary_key=True)
     name = Column(String(50), nullable=False)
     type = Column(String(50), nullable=False)
-    dob = Column(String(50), nullable=False)
+    dob = Column(DateTime, nullable=False)
     address = Column(String(50), nullable=False)
     email = Column(String(50), nullable=False)
     created_at = Column(DateTime(timezone=True), default=func.now())
