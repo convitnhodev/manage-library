@@ -16,5 +16,16 @@ class CardCreate(BaseModel):
     dob: datetime
     address: str
     email: EmailStr
+
+class Card(BaseModel): 
+    age: int
+    name: str 
+    type: TypeCard
+    dob: datetime
+    address: str
+    email: EmailStr
+
+
+
     
 

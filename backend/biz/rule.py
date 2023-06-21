@@ -1,9 +1,11 @@
-from schemas.rules import RuleShow
+from schemas.rules import RuleShow, RuleBase, RuleCreate
 from db.models.rules import Rule
 import json
+from sqlalchemy.orm import Session
+from db.repository.rules import create_rule_by_owner
 
 
-def ConvertRuleFromDBToShow(rule: Rule):
+def convert_rule_from_DB_to_show(rule: Rule):
     show = RuleShow(
         min_age = rule.min_age,
         max_age = rule.max_age, 
@@ -19,13 +21,8 @@ def ConvertRuleFromDBToShow(rule: Rule):
     return show
 
 
-
-    # min_age: int
-    # max_age: int 
-    # time_effective_card: int 
-    # numbers_category: int 
-    # detail_category: List[str]
-    # detail_type: List[str]
-    # max_day_borrow: int
-    # max_items_borrow: int 
-    # distance_year: int 
+def admin_create_rule(rule_create: RuleCreate, db:Session, owner: str): 
+    rule = RuleBase(**rule_create.dict())
+    rule.owner = owner
+    rule = create_rule_by_owner(rule, db)
+    return convert_rule_from_DB_to_show(rule)

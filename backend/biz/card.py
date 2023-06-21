@@ -4,6 +4,9 @@ from db.repository.rules import get_rule_by_owner
 from sqlalchemy.orm import Session
 from datetime import date
 import json 
+from const import detail_error as err
+
+
 
 def calculate_age(date_of_birth):
     today = date.today()
@@ -19,12 +22,12 @@ def calculate_age(date_of_birth):
 def is_card_valid(card: CardCreate, owner: str, db: Session): 
     rule = get_rule_by_owner(owner, db)
     if rule is None:
-        return True
+        return err.CODE_VALID
     if calculate_age(card.dob) < rule.min_age or calculate_age(card.dob) > rule.max_age : 
-        return "Age is invalid"
+        return err.CODE_INVALID_AGE
     
     if card.type not in json.loads(rule.detail_type):
         #raise ValueError("Type is invalid")
-        return "Type is invalid"
-    
-    return True
+        return err.CODE_INVALID_TYPE
+    return err.CODE_VALID
+

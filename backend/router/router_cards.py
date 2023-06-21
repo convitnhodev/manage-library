@@ -12,20 +12,22 @@ from db.models.users import User
 from biz.card import is_card_valid
 
 
+from const import detail_error as err
+
+
 router = APIRouter()
 
 @router.post("/new")
 def create_card(card: CardCreate, db: Session = Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
     try: 
-        checked = is_card_valid(card=card, db=db, owner=current_user.owner)
-
-        if checked != True:
-            err = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                                          detail= checked)
-            raise err
+        code = is_card_valid(card=card, db=db, owner=current_user.owner)
+        if code != err.CODE_VALID:
+            err_return = HTTPException(status_code= code ,
+                                  detail= err.map_err[code])
+            raise err_return
         card = create_new_card(card, db)
     except :
-        raise err
+        raise err_return
     return card
 
 

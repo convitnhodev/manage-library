@@ -16,7 +16,7 @@ class RuleBase(BaseModel):
     owner: List[str] = None
 
 
-class RuleCreate(RuleBase): 
+class RuleCreate(BaseModel): 
     min_age: int
     max_age: int 
     time_effective_card: int 
@@ -28,7 +28,7 @@ class RuleCreate(RuleBase):
     distance_year: int 
 
 
-class RuleShow(RuleBase): 
+class RuleShow(BaseModel): 
     min_age: int
     max_age: int 
     time_effective_card: int 

@@ -1,0 +1,17 @@
+## invalid 
+## Age invalie 
+## card 
+CODE_VALID = 0 
+CODE_INVALID_AGE = 422
+CODE_INVALID_TYPE = 423
+
+DETAIL_DATA_VALID = "Valid"
+DETAIL_INVALID_AGE= "Age is invalid"
+DETAIL_INVALID_TYPE= "Type is invalid"
+
+map_err = {
+    CODE_VALID: DETAIL_DATA_VALID, 
+    CODE_INVALID_AGE: DETAIL_INVALID_AGE, 
+    CODE_INVALID_TYPE: DETAIL_INVALID_TYPE
+}
+

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from db.models.rules import Rule
-from schemas.rules import RuleCreate
+from schemas.rules import RuleCreate, RuleBase
 import json
 import uuid
 
@@ -18,8 +18,8 @@ def delete_rule_by_owner(owner: str, db: Session):
     db.commit()
 
 
-def create_rule_by_owner(owner: str, rule: RuleCreate, db: Session):
-    existing_rule = db.query(Rule).filter(Rule.owner == owner).first()
+def create_rule_by_owner(rule: RuleBase, db: Session):
+    existing_rule = db.query(Rule).filter(Rule.owner == rule.owner).first()
 
     if existing_rule:
         existing_rule.min_age = rule.min_age
@@ -36,7 +36,7 @@ def create_rule_by_owner(owner: str, rule: RuleCreate, db: Session):
     else:
         new_rule = Rule(
             id=str(uuid.uuid4()),
-            owner=owner,
+            owner=rule.owner,
             min_age=rule.min_age,
             max_age=rule.max_age,
             time_effective_card=rule.time_effective_card,
@@ -47,8 +47,8 @@ def create_rule_by_owner(owner: str, rule: RuleCreate, db: Session):
             max_items_borrow=rule.max_items_borrow,
             created_at=rule.created_at,
             distance_year = rule.distance_year
-
         )
+
         db.add(new_rule)
         db.commit()
         db.refresh(new_rule)
