@@ -16,7 +16,7 @@ class RuleBase(BaseModel):
     owner: List[str] = None
 
 
-class RuleCreate(BaseModel): 
+class RuleCreate(BaseModel):    
     min_age: int
     max_age: int 
     time_effective_card: int 

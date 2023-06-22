@@ -17,15 +17,21 @@ class CardCreate(BaseModel):
     address: str
     email: EmailStr
 
-class Card(BaseModel): 
+class CardModel(BaseModel): 
     age: int
     name: str 
     type: TypeCard
     dob: datetime
     address: str
     email: EmailStr
-
-
+    created_at: datetime
+    updated_at: datetime
+    owner: str
+    expires_at: datetime
 
     
+
+
+
+
 

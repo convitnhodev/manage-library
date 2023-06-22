@@ -9,7 +9,7 @@ from db.repository.cards import list_cards_by_type_card
 
 from router.router_login import get_current_user_from_token
 from db.models.users import User
-from biz.card import is_card_valid
+from biz.card import is_card_valid, user_create_new_card
 
 
 from const import detail_error as err
@@ -25,7 +25,7 @@ def create_card(card: CardCreate, db: Session = Depends(get_db), current_user: U
             err_return = HTTPException(status_code= code ,
                                   detail= err.map_err[code])
             raise err_return
-        card = create_new_card(card, db)
+        card = user_create_new_card(card, db)
     except :
         raise err_return
     return card

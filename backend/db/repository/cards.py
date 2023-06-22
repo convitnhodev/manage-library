@@ -1,24 +1,17 @@
 from sqlalchemy.orm import Session
 
-from schemas.cards import CardCreate
+from schemas.cards import CardModel
 from db.models.cards import Card
 
 import uuid
 
 
-def create_new_card(card: CardCreate, db:Session): 
-    card = Card(
-        id = str(uuid.uuid4()),
-        name = card.name, 
-        type = card.type,
-        dob = card.dob, 
-        address = card.address, 
-        email = card.email, 
-    )
-
-    db.add(card)
+def create_new_card(card: CardModel, db:Session): 
+    card_data = card.dict()  # Chuyển đổi thành từ điển
+    new_card = Card(**card_data)  # Sử 
+    db.add(new_card)
     db.commit()
-    db.refresh(card)
+    db.refresh(new_card)
     return card
 
 
