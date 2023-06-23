@@ -19,8 +19,8 @@ router = APIRouter()
 
 @router.post("/new")
 def create_card(card: CardCreate, db: Session = Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
-    try: 
-        code = is_card_valid(card=card, db=db, owner=current_user.owner)
+    try:  
+       code = is_card_valid(card=card, db=db, owner=current_user.owner)
         if code != err.CODE_VALID:
             err_return = HTTPException(status_code= code ,
                                   detail= err.map_err[code])
