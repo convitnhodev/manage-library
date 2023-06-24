@@ -16,9 +16,7 @@ class Item(Base):
     created_by = Column(String(50), nullable=True)
     updated_by = Column(String(50), nullable=True)
     numbers = Column(Integer, nullable=True)
-
-
-
+    
 
 
 
