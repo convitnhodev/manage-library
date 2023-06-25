@@ -12,8 +12,10 @@ def create_library_loan_form(form_create: LibraryLoanFormCreate, db:Session, own
     form = LibraryLoanFormModel(**form_create.dict())
     form.owner = owner
     form  = create_new_library_loan_form(form, db)
-    return form
-
+    data_form = object_as_dict(form)
+    form_return = LibraryLoanForm(**data_form)
+    form_return.detail_book = json.loads(form.detail_book)
+    return form_return
 
 
 def user_list_library_loan_form_by_owner(owner: str, db: Session):

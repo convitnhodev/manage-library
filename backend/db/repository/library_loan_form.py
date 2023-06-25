@@ -27,5 +27,14 @@ def list_library_loan_form_by_owner(owner: str, db: Session):
 
 
 
+def get_library_load_form_by_id_and_owner(owner: str, id: str, db: Session):
+    form = db.query(LibraryLoanForm).filter(
+        LibraryLoanForm.owner == owner,
+        LibraryLoanForm.id == id
+    ).first()
+    return form
+
+
+
 
 

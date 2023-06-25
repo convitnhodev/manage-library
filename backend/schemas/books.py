@@ -6,27 +6,28 @@ import json
 
 
 
-class DetailBook(BaseModel): 
-    ordinal_number: int
+class DetailAddingBook(BaseModel): 
     book_name: str 
     category: str 
     author: str 
-    number: str 
+    year_of_publication: int 
+    publisher: str 
+    numbers: int 
+    owner: Optional[str]
     def json(self):
         return self.dict()
 
-class LibraryLoanFormModel(BaseModel): 
-    detail_book: List[DetailBook]
+class BookModel(BaseModel): 
+    detail_adding_book: List[DetailAddingBook]
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
     owner: Optional[str]
-    expires_at: Optional[datetime]
-    name_reader: str 
+    #expires_at: Optional[datetime]
+    id: Optional[str]
 
 
-class LibraryLoanFormCreate(BaseModel): 
-    detail_book: List[DetailBook]
-    name_reader: str 
+class BookCreate(BaseModel): 
+    detail_adding_book: List[DetailAddingBook]
 
 
 
