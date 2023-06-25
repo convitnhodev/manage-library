@@ -3,6 +3,8 @@ from db.models.rules import Rule
 import json
 from sqlalchemy.orm import Session
 from db.repository.rules import create_rule_by_owner
+from db.repository.rules import get_rule_by_onwer_and_id
+from db.repository.rules import delete_rule_by_onwer_and_id
 
 
 def convert_rule_from_DB_to_show(rule: Rule):
@@ -26,3 +28,23 @@ def admin_create_rule(rule_create: RuleCreate, db:Session, owner: str):
     rule.owner = owner
     rule = create_rule_by_owner(rule, db)
     return convert_rule_from_DB_to_show(rule)
+
+
+
+
+
+def user_get_rule_by_id(owner: str, id: int, db:Session):
+    rule = get_rule_by_onwer_and_id(owner, id, db)
+    if rule == None: 
+        return None
+    rule_show = convert_rule_from_DB_to_show(rule)
+    return rule_show
+
+
+
+def user_delete_rule_by_id(owner: str, id: int, db: Session): 
+    rule = delete_rule_by_onwer_and_id(owner, id, db)
+    if rule == None: 
+        return None 
+    rule_show = convert_rule_from_DB_to_show(rule)
+    return rule_show

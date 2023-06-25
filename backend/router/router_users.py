@@ -39,6 +39,6 @@ def create_user(user: UserCreate, db: Session= Depends(get_db)):
         
     code = detail_error.CODE_UNAUTHORIZED 
     raise HTTPException(status_code = code,
-                                          detail=detail_error.map_err[code])
+                        detail=detail_error.map_err[code])
 
     

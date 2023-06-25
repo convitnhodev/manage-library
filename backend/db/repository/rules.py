@@ -8,9 +8,25 @@ def get_rule_by_owner(owner: str, db: Session):
     rule = db.query(Rule).filter(Rule.owner == owner).first()
     return rule 
 
-def get_rule_by_id(id: str, db: Session):
+def get_rule_by_id(id: int, db: Session):
     rule = db.query(Rule).filter(Rule.id == id).first()
     return rule 
+
+
+
+def get_rule_by_onwer_and_id(owner: str, id: int, db: Session):
+    rule = db.query(Rule).filter(Rule.owner == owner, Rule.id == id).first()
+    return rule 
+
+
+def delete_rule_by_onwer_and_id(owner: str, id: int, db: Session):
+    existing_rule = db.query(Rule).filter(Rule.owner == owner, Rule.id == id).first()
+    if existing_rule: 
+        db.delete(existing_rule)
+        db.commit()
+        return existing_rule
+    
+    return None
 
 
 def delete_rule_by_owner(owner: str, db: Session):
@@ -35,7 +51,6 @@ def create_rule_by_owner(rule: RuleBase, db: Session):
         return existing_rule
     else:
         new_rule = Rule(
-            id=str(uuid.uuid4()),
             owner=rule.owner,
             min_age=rule.min_age,
             max_age=rule.max_age,
@@ -48,7 +63,6 @@ def create_rule_by_owner(rule: RuleBase, db: Session):
             created_at=rule.created_at,
             distance_year = rule.distance_year
         )
-
         db.add(new_rule)
         db.commit()
         db.refresh(new_rule)

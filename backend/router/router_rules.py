@@ -4,36 +4,46 @@ from schemas.rules import RuleCreate, RuleShow
 from db.session import get_db
 from db.models.users import User
 from router.router_login import get_current_user_from_token
-from db.repository.rules import get_rule_by_owner, create_rule_by_owner
 from biz.rule import admin_create_rule
+from const import detail_error
+from biz.rule import user_get_rule_by_id
+from biz.rule import user_delete_rule_by_id
 
 router = APIRouter()
-@router.post("/new")
+@router.post("")
 def create_new_rule(rule: RuleCreate, db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
-    credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                                          detail="You dont have permission")
-    # authrization
-    if current_user.username != current_user.owner :
-        raise credentials_exception
-    
+
+    if not current_user.is_supperuser : 
+        code = detail_error.CODE_DONT_HAVE_PERMISSIONS
+        raise HTTPException(status_code = code, 
+                            detail = detail_error.map_err[code])
     rule = admin_create_rule(rule_create= rule, db = db, owner=current_user.username)
     return rule
 
 
 
 
-@router.get("/get")
-def get_rule(db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
+@router.get("/{id}")
+def get_rule(id: int, db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
+    rule = user_get_rule_by_id(owner=current_user.owner, id = id, db=db)
+    if rule == None: 
+        code = detail_error.CODE_RECORD_NOT_FOUND
+        raise HTTPException(status_code = code, 
+                            detail = detail_error.map_err[code])
     
-    empty_exception = HTTPException(status_code=status.HTTP_204_NO_CONTENT,
-                                          detail="Rule empty")
+    return rule
 
-    rule = get_rule_by_owner(db = db, owner=current_user.owner)
-    if rule is None:
-        raise empty_exception
-    rule_show = ConvertRuleFromDBToShow(rule=rule)
-    return rule_show
 
+
+@router.delete("{id}")
+def delete_rule(id: int, db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
+    rule = user_delete_rule_by_id(owner=current_user.owner, id = id, db=db)
+    if rule == None: 
+        code = detail_error.CODE_RECORD_NOT_FOUND
+        raise HTTPException(status_code = code, 
+                            detail = detail_error.map_err[code])
+    
+    return rule
 
 
 
