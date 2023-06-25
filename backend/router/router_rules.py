@@ -49,7 +49,7 @@ def get_all_rule( db: Session= Depends(get_db), current_user: User=Depends(get_c
 
 
 
-@router.delete("{id}")
+@router.delete("/{id}")
 def delete_rule(id: int, db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
     rule = user_delete_rule_by_id(owner=current_user.owner, id = id, db=db)
     if rule == None: 
@@ -61,7 +61,7 @@ def delete_rule(id: int, db: Session= Depends(get_db), current_user: User=Depend
 
 
 
-@router.put("{id}")
+@router.put("/{id}")
 def update_rule(id: int, rule: RuleCreate, db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
     if not current_user.is_supperuser : 
         code = detail_error.CODE_DONT_HAVE_PERMISSIONS

@@ -34,7 +34,7 @@ def user_create_rule(rule_create: RuleCreate, db:Session, owner: str):
 
 def user_get_rule_by_id(owner: str, id: int, db:Session):
     rule = get_rule_by_onwer_and_id(owner, id, db)
-    if rule == None: 
+    if rule is None: 
         return None
     rule_show = convert_rule_from_DB_to_show(rule)
     return rule_show
@@ -51,7 +51,7 @@ def user_list_rule(owner: str, db:Session):
 
 def user_delete_rule_by_id(owner: str, id: int, db: Session): 
     rule = delete_rule_by_onwer_and_id(owner, id, db)
-    if rule == None: 
+    if rule is None: 
         return None 
     rule_show = convert_rule_from_DB_to_show(rule)
     return rule_show

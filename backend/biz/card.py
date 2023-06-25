@@ -2,6 +2,10 @@ from schemas.cards import CardCreate, CardModel
 from db.models.rules import Rule
 from db.repository.rules import list_rule_by_owner
 from db.repository.cards import create_new_card
+from db.repository.cards import list_card_by_owner
+from db.repository.cards import get_card_by_id_and_owner
+from db.repository.cards import delete_card_by_id_and_owner
+from db.repository.cards import update_card_by_id
 from sqlalchemy.orm import Session
 from datetime import date, datetime, timedelta
 import json 
@@ -55,4 +59,44 @@ def user_create_new_card(card: CardCreate, db: Session, owner: str):
     return card
 
 
+def user_update_card(card: CardCreate, db: Session, owner: str, id: int):
+    rules = list_rule_by_owner(owner, db)
+    if len(rules) == 0:
+        rule = None
+    else :
+        rule = rules[0]
+    code = is_card_valid(card=card, rule=rule)
+    if code != detail_error.CODE_VALID:
+        return code
+    
+    # current_time = datetime.now()
+    # if rule is not None:
+    #     time_effective_card = rule.time_effective_card
+    # else : 
+    #     time_effective_card = default.TIME_EXPIRATION_SECONDS_CARD
+    # expire = current_time + timedelta(days=time_effective_card)
+    card = CardModel(**card.dict())
+    card.owner = owner
+    card = update_card_by_id(card, db, id)
+    return card
 
+
+
+
+def user_list_cards(owner: str, db: Session, offset: int = 0, limit: int =100, is_active: bool = False): 
+    cards = list_card_by_owner(owner=owner,db= db,offset= offset,limit= limit, is_active=is_active)
+    return cards
+
+
+def user_get_card_by_id_and_owner(owner: str, db: Session, id: int):
+    card = get_card_by_id_and_owner(id_card=id,owner=owner, db=db)
+    if card is None: 
+        return None
+    return card 
+
+
+def user_delete_card_by_id_and_owner(owner: str, db: Session, id: int):
+    card = delete_card_by_id_and_owner(id_card=id,owner=owner, db=db)
+    if card is None: 
+        return None
+    return card
