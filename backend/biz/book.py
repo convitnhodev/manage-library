@@ -1,17 +1,50 @@
-from schemas.books import BookCreate, BookModel
+from schemas.books import BookCreate, BookModel, DetailAddingBook
 from db.models.books import Book
+from db.models.rules import Rule
 import json
 from sqlalchemy.orm import Session
 from db.repository.books import add_book
 from db.repository.books import list_books_by_owner
 from db.repository.books import get_book_by_id
 from db.repository.books import delete_book_by_id
+from db.repository.rules import list_rule_by_owner
 from schemas.helper import object_as_dict
+from const import detail_error 
+from datetime import date, datetime, timedelta
 
+def is_book_valid(book: DetailAddingBook, rule: Rule):
+    if rule is None: 
+        return detail_error.CODE_VALID
+    today = date.today()
+    if today.year - book.year_of_publication > rule.distance_year: 
+        return detail_error.DETAIL_INVALID_YEAR_PUBLICATION
+    
+    if book.category not in json.load(rule.detail_category): 
+        return detail_error.CODE_INVALID_CATEGORY_BOOK
+    return detail_error.CODE_VALID
 
 
 def user_create_books(book_create: BookCreate, db:Session, owner: str):
+    rules = list_rule_by_owner(owner, db)
+    if len(rules) == 0:
+        rule = None
+    else :
+        rule = rules[0]
+
+    result_check = []
+    for book in book_create.detail_adding_book: 
+        result = is_book_valid(book, rule)
+        result_check.append(result)
+        
+    for check in result_check: 
+        if check != detail_error.CODE_VALID: 
+            return result_check
+    
+    
+    
+    
     result_added_book = []
+    
     for book in book_create.detail_adding_book: 
         book.owner = owner
         book_added = add_book(book, db)

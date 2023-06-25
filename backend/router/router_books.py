@@ -7,13 +7,19 @@ from router.router_login import get_current_user_from_token
 from biz.book import user_create_books, user_list_book_by_owner, user_get_book_by_id
 from biz.book import user_delete_book_by_id
 
+from const import detail_error 
+
 router = APIRouter()
 @router.post("/")
-def create_new_book(book: BookCreate, db: Session= Depends(get_db)):
-   
-    book_return = user_create_books(book_create=book, db=db, owner= "haha")
-    return book_return
+def create_new_book(book: BookCreate, db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
+    try: 
+        result = user_create_books(book_create=book, db=db, owner= current_user.owner)
+        return result
 
+    except Exception as e:  
+        code = detail_error.CODE_ERROR_COMOM
+        raise HTTPException(status_code = code, 
+                            detail = detail_error.map_err[code])
 
 @router.get("")
 def user_list_book(
