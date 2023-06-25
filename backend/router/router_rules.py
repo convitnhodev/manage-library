@@ -4,10 +4,11 @@ from schemas.rules import RuleCreate, RuleShow
 from db.session import get_db
 from db.models.users import User
 from router.router_login import get_current_user_from_token
-from biz.rule import admin_create_rule
+from biz.rule import user_create_rule
 from const import detail_error
 from biz.rule import user_get_rule_by_id
 from biz.rule import user_delete_rule_by_id
+from biz.rule import user_update_rule_by_id
 
 router = APIRouter()
 @router.post("")
@@ -17,7 +18,7 @@ def create_new_rule(rule: RuleCreate, db: Session= Depends(get_db), current_user
         code = detail_error.CODE_DONT_HAVE_PERMISSIONS
         raise HTTPException(status_code = code, 
                             detail = detail_error.map_err[code])
-    rule = admin_create_rule(rule_create= rule, db = db, owner=current_user.username)
+    rule = user_create_rule(rule_create= rule, db = db, owner=current_user.username)
     return rule
 
 
@@ -47,3 +48,22 @@ def delete_rule(id: int, db: Session= Depends(get_db), current_user: User=Depend
 
 
 
+@router.put("{id}")
+def update_rule(id: int, rule: RuleCreate, db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
+    if not current_user.is_supperuser : 
+        code = detail_error.CODE_DONT_HAVE_PERMISSIONS
+        raise HTTPException(status_code = code, 
+                            detail = detail_error.map_err[code])
+    
+    try: 
+        rule = user_update_rule_by_id(rule_update= rule, db = db, owner=current_user.username, id = id)
+        if rule is not None: 
+            return rule
+        code = detail_error.CODE_RECORD_NOT_FOUND
+        return  HTTPException(status_code=code, 
+                            detail = detail_error.map_err[code])
+    except: 
+        code = detail_error.CODE_CANNOT_UPDATE
+        raise HTTPException(status_code = code, 
+                            detail = detail_error.map_err[code])
+    

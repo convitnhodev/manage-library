@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from db.repository.rules import create_rule_by_owner
 from db.repository.rules import get_rule_by_onwer_and_id
 from db.repository.rules import delete_rule_by_onwer_and_id
+from db.repository.rules import update_rule_by_owner_and_id
 
 
 def convert_rule_from_DB_to_show(rule: Rule):
@@ -23,14 +24,11 @@ def convert_rule_from_DB_to_show(rule: Rule):
     return show
 
 
-def admin_create_rule(rule_create: RuleCreate, db:Session, owner: str): 
+def user_create_rule(rule_create: RuleCreate, db:Session, owner: str): 
     rule = RuleBase(**rule_create.dict())
     rule.owner = owner
     rule = create_rule_by_owner(rule, db)
     return convert_rule_from_DB_to_show(rule)
-
-
-
 
 
 def user_get_rule_by_id(owner: str, id: int, db:Session):
@@ -41,10 +39,24 @@ def user_get_rule_by_id(owner: str, id: int, db:Session):
     return rule_show
 
 
-
 def user_delete_rule_by_id(owner: str, id: int, db: Session): 
     rule = delete_rule_by_onwer_and_id(owner, id, db)
     if rule == None: 
         return None 
     rule_show = convert_rule_from_DB_to_show(rule)
     return rule_show
+
+
+
+def user_update_rule_by_id(owner: str, id: int, rule_update: RuleCreate, db: Session): 
+    rule = RuleBase(**rule_update.dict())
+    rule.owner = owner
+    try: 
+        rule = update_rule_by_owner_and_id(owner=owner, id = id, rule = rule, db = db)
+        if rule is None: 
+            return None
+        return convert_rule_from_DB_to_show(rule)
+    except Exception as e:
+        raise e 
+
+   
