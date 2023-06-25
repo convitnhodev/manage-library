@@ -1,9 +1,9 @@
 p, super_admin, *, read 
 p, super_admin, *, write
-p, canhhuy, srn:user:register, read 
-p, canhhuy, srn:user:register, write
-p, vanhai, srn:user:register, read 
-p, vanhai, srn:user:register, write
-p, convitnhodev, srn:user:register, read 
-p, convitnhodev, srn:user:register, write
+p, canhhuy, srn:user:registrion, read 
+p, canhhuy, srn:user:registrion, write
+p, vanhai, srn:user:registrion, read 
+p, vanhai, srn:user:registrion, write
+p, convitnhodev, srn:user:registrion, read 
+p, convitnhodev, srn:user:registrion, write
 

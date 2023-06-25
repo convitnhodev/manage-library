@@ -40,4 +40,3 @@ def get_card_by_owner(owner: str, db: Session):
 
 
 
-

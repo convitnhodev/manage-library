@@ -20,6 +20,8 @@ def create_new_rule(rule: RuleCreate, db: Session= Depends(get_db), current_user
     return rule
 
 
+
+
 @router.get("/get")
 def get_rule(db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
     

@@ -14,7 +14,7 @@ class User(Base):
     email = Column(String(50), nullable=False)
     password = Column(String(150), nullable=False)
     created_at = Column(DateTime(timezone=True), default=func.now())
-    updated_at = Column(DateTime(timezone=True), default=func.now())
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=func.now())
     expires_at = Column(DateTime(timezone=True), default=lambda: datetime.utcnow() + timedelta(days=90))
     created_by = Column(String(50), default="ADMIN")
     updated_by = Column(String(50), default="ADMIN")
