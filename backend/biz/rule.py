@@ -6,6 +6,7 @@ from db.repository.rules import create_rule_by_owner
 from db.repository.rules import get_rule_by_onwer_and_id
 from db.repository.rules import delete_rule_by_onwer_and_id
 from db.repository.rules import update_rule_by_owner_and_id
+from db.repository.rules import list_rule_by_owner
 
 
 def convert_rule_from_DB_to_show(rule: Rule):
@@ -37,6 +38,15 @@ def user_get_rule_by_id(owner: str, id: int, db:Session):
         return None
     rule_show = convert_rule_from_DB_to_show(rule)
     return rule_show
+
+
+def user_list_rule(owner: str, db:Session): 
+    rules = list_rule_by_owner(owner, db)
+    rule_shows = []
+    for rule in rules:
+        rule_show = convert_rule_from_DB_to_show(rule)
+        rule_shows.append(rule_show)
+    return rule_shows 
 
 
 def user_delete_rule_by_id(owner: str, id: int, db: Session): 

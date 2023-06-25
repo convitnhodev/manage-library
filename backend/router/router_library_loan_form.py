@@ -4,7 +4,7 @@ from schemas.library_load_form import LibraryLoanFormModel, LibraryLoanFormCreat
 from db.session import get_db
 from db.models.users import User
 from router.router_login import get_current_user_from_token
-from db.repository.rules import get_rule_by_owner, create_rule_by_owner
+from db.repository.rules import create_rule_by_owner
 from biz.library_loan_form import create_library_loan_form,user_list_library_loan_form_by_owner 
 
 router = APIRouter()

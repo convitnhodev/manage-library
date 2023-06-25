@@ -10,7 +10,6 @@ class TypeCard(str, Enum):
 
 
 class CardCreate(BaseModel): 
-    age: int
     name: str 
     type: TypeCard
     dob: datetime
@@ -18,16 +17,15 @@ class CardCreate(BaseModel):
     email: EmailStr
 
 class CardModel(BaseModel): 
-    age: int
     name: str 
     type: TypeCard
     dob: datetime
     address: str
     email: EmailStr
-    created_at: datetime
-    updated_at: datetime
-    owner: str
-    expires_at: datetime
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
+    owner: Optional[str]
+    expires_at: Optional[datetime]
 
     
 

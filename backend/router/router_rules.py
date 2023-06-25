@@ -9,6 +9,7 @@ from const import detail_error
 from biz.rule import user_get_rule_by_id
 from biz.rule import user_delete_rule_by_id
 from biz.rule import user_update_rule_by_id
+from biz.rule import user_list_rule
 
 router = APIRouter()
 @router.post("")
@@ -33,6 +34,18 @@ def get_rule(id: int, db: Session= Depends(get_db), current_user: User=Depends(g
                             detail = detail_error.map_err[code])
     
     return rule
+
+
+@router.get("")
+def get_all_rule( db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
+    try:
+        rules = user_list_rule(owner=current_user.owner, db = db)
+        return rules
+    except: 
+        code = detail_error.CODE_CANNOT_GET
+        raise HTTPException(status_code = code, 
+                            detail = detail_error.map_err[code])
+
 
 
 

@@ -12,23 +12,22 @@ from db.models.users import User
 from biz.card import is_card_valid, user_create_new_card
 
 
-from const import detail_error as err
+from const import detail_error 
 
 
 router = APIRouter()
 
-@router.post("/new")
+@router.post("")
 def create_card(card: CardCreate, db: Session = Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
-    # try:  
-    #    code = is_card_valid(card=card, db=db, owner=current_user.owner)
-    #     if code != err.CODE_VALID:
-    #         err_return = HTTPException(status_code= code ,
-    #                               detail= err.map_err[code])
-    #         raise err_return
-    #     card = user_create_new_card(card, db)
-    # except :
-    #     raise err_return
-    return card
+    try:  
+        result = user_create_new_card(card, db, current_user.owner)
+        if type(result) == type(detail_error.CODE_VALID): 
+            return HTTPException(status_code = result, 
+                                detail = detail_error.map_err[result])
+        return result
+    except Exception as e:  
+        raise HTTPException(status_code = 500, 
+                            detail = str(e))
 
 
 @router.get("/{id}")

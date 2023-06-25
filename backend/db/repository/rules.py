@@ -3,8 +3,8 @@ from db.models.rules import Rule
 from schemas.rules import RuleCreate, RuleBase
 import json
 
-def get_rule_by_owner(owner: str, db: Session):
-    rule = db.query(Rule).filter(Rule.owner == owner).first()
+def list_rule_by_owner(owner: str, db: Session):
+    rule = db.query(Rule).filter(Rule.owner == owner).all()
     return rule 
 
 def get_rule_by_id(id: int, db: Session):
