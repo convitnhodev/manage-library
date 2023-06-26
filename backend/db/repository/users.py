@@ -29,4 +29,5 @@ def create_new_user(user: UserCreate, db:Session, owner: str, is_admin: bool):
         db.refresh(user)
         return user 
     except Exception as e:
+    
         raise e 
