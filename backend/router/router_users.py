@@ -17,12 +17,15 @@ router = APIRouter()
 def create_user(user: UserCreate, db: Session= Depends(get_db), current_user:
                  User=Depends(get_current_user_from_token)):
     
-    if authrization.enforce(current_user.username, resource.RESOUCE_REGISTRATION, resource.ACTION_WRITE):
-        try: 
-            user = create_new_user(user, db, owner=user.username, is_admin=True)
-            return user 
-        except Exception as e: 
-            return e 
+    if not current_user.is_supperuser : 
+        code = detail_error.CODE_UNAUTHORIZED
+        raise HTTPException(status_code =  code ,
+                            detail = detail_error.map_err[code]) 
+    try: 
+        user = create_new_user(user, db, owner=current_user.username, is_admin=False)
+        return user 
+    except Exception as e: 
+        return e 
     
 
 
@@ -48,7 +51,7 @@ def list_users(db:  Session=Depends(get_db), current_user: User=Depends(get_curr
     if not current_user.is_supperuser : 
         code = detail_error.CODE_UNAUTHORIZED
         raise HTTPException(status_code =  code ,
-                            detail = detail_error.map_err[err]) 
+                            detail = detail_error.map_err[code]) 
   
     users = admin_list_users(db=db, owner=current_user.owner)
     return users
