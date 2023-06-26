@@ -46,7 +46,9 @@ def user_create_new_card(card: CardCreate, db: Session, owner: str):
     if code != detail_error.CODE_VALID:
         return code
     
-    current_time = datetime.now()
+    current_time = card.created_at
+    if card.created_at is None: 
+        current_time = datetime.now()
     if rule is not None:
         time_effective_card = rule.time_effective_card
     else : 

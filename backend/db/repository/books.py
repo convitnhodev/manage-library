@@ -66,7 +66,6 @@ def update_book_by_id(book: DetailAddingBook, db:Session, id: int, updated_by: s
     existing_book.updated_by = updated_by
     existing_book.numbers = book.numbers
 
-
     db.commit()
     db.refresh(existing_book)
     return existing_book

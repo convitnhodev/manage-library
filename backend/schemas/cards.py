@@ -15,6 +15,7 @@ class CardCreate(BaseModel):
     dob: datetime
     address: str
     email: EmailStr
+    created_at: Optional[datetime]
 
 class CardModel(BaseModel): 
     name: str 

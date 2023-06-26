@@ -28,6 +28,11 @@ class LibraryLoanFormCreate(BaseModel):
     detail_book: List[DetailBook]
     name_reader: str 
 
+class LibraryLoanFormCreate(BaseModel): 
+    id_card: int 
+    ids_books: List[int]
+    created_at: Optional[datetime]
+
 
 
 

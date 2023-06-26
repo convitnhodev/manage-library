@@ -18,4 +18,3 @@ class Rule(Base):
     created_at = Column(DateTime, nullable=True)
 
 
-

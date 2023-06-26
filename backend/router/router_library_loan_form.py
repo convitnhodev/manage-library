@@ -8,10 +8,10 @@ from db.repository.rules import create_rule_by_owner
 from biz.library_loan_form import create_library_loan_form,user_list_library_loan_form_by_owner 
 
 router = APIRouter()
-@router.post("/new")
-def create_new_library_loan_form(form: LibraryLoanFormCreate, db: Session= Depends(get_db)):
+@router.post("")
+def create_new_library_loan_form(form: LibraryLoanFormCreate, db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
    
-    form_return = create_library_loan_form(form_create=form, db=db, owner= "haha")
+    form_return = create_library_loan_form(form_create=form, db=db, owner= current_user.owner)
     return form_return
 
 
