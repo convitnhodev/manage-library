@@ -78,7 +78,8 @@ def create_library_loan_form(form_create: LibraryLoanFormCreate, db:Session, own
         borrow_book_by_id(book_id= book_id, number=1, db=db, owner=owner)
     data_form = object_as_dict(form_created)
     form_return = LibraryLoanForm(**data_form)
-    form_return.ids_books = json.loads(form.ids_books)
+    form_return.ids_books = json.loads(form_created.ids_books)
+
     return form_return
 
 
