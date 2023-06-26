@@ -3,7 +3,7 @@ from db.models.library_loan_form import LibraryLoanForm
 import json
 from datetime import date, datetime, timedelta
 from sqlalchemy.orm import Session
-from db.repository.library_loan_form import create_new_library_loan_form
+from db.repository.library_loan_form import create_new_library_loan_form, get_library_load_form_by_id_and_owner
 from db.repository.library_loan_form import list_library_loan_form_by_owner
 from db.repository.books import  get_book_by_id
 from schemas.helper import object_as_dict
@@ -84,10 +84,9 @@ def create_library_loan_form(form_create: LibraryLoanFormCreate, db:Session, own
 
 def user_list_library_loan_form_by_owner(owner: str, db: Session):
     forms = list_library_loan_form_by_owner(owner, db)
-    models_forms = []
-    for form in forms:
-        data_form = object_as_dict(form)
-        model_form = LibraryLoanForm(**data_form)
-        model_form.detail_book = json.loads(form.detail_book)
-        models_forms.append(model_form)
-    return models_forms
+    return forms
+
+
+def user_get_librara_by_owner_and_id(owner: str, id: int, db: Session):
+    form = get_library_load_form_by_id_and_owner(owner=owner, id=id, db=db)
+    return form 
