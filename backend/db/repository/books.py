@@ -65,10 +65,16 @@ def update_book_by_id(book: DetailAddingBook, db:Session, id: int, updated_by: s
     existing_book.publisher = book.publisher
     existing_book.updated_by = updated_by
     existing_book.numbers = book.numbers
+    existing_book.amount_borrowed = book.amount_borrowed
 
     db.commit()
     db.refresh(existing_book)
     return existing_book
 
 
-
+def update_book_amount_borrowed(id: int, amount: int, owner: str, db: Session): 
+    book = db.query(Book).filter(Book.id == id, Book.owner == owner).first()
+    book.amount_borrowed = book.amount_borrowed + amount
+    db.commit()
+    db.refresh(book)
+    return book
