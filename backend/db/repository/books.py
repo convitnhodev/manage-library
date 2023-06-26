@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-
+from sqlalchemy import func
 from schemas.books import BookModel
 from schemas.books import DetailAddingBook
 from schemas.helper import CustomJSONEncoder
@@ -32,10 +32,10 @@ def add_book(book: DetailAddingBook, db: Session):
     db.refresh(new_book)
     return new_book
 
-def list_books_by_owner(owner: str, db: Session, offset: int , limit: int):
+def list_books_by_owner(owner: str, db: Session, offset: int, limit: int):
     books = db.query(Book).filter(Book.owner == owner).offset(offset).limit(limit).all()
-    return books
-
+    total_records = db.query(func.count(Book.id)).filter(Book.owner == owner).scalar()
+    return books, total_records
 
 def get_book_by_id(id: int,owner: str, db: Session):
     book = db.query(Book).filter(Book.id == id, Book.owner == owner).first()

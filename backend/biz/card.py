@@ -84,8 +84,8 @@ def user_update_card(card: CardCreate, db: Session, owner: str, id: int):
 
 
 def user_list_cards(owner: str, db: Session, offset: int = 0, limit: int =100, is_active: bool = False): 
-    cards = list_card_by_owner(owner=owner,db= db,offset= offset,limit= limit, is_active=is_active)
-    return cards
+    cards, total = list_card_by_owner(owner=owner,db= db,offset= offset,limit= limit, is_active=is_active)
+    return cards, total
 
 
 def user_get_card_by_id_and_owner(owner: str, db: Session, id: int):

@@ -40,9 +40,8 @@ def user_create_books(book_create: BookCreate, db:Session, owner: str):
         if check != detail_error.CODE_VALID: 
             return result_check
     
-    
-    
-    
+
+    # add after checking 
     result_added_book = []
     
     for book in book_create.detail_adding_book: 
@@ -62,11 +61,11 @@ def user_create_books(book_create: BookCreate, db:Session, owner: str):
 
 
 def user_list_book_by_owner(owner: str, db: Session,offset: int = 0, limit: int = 100):
-    books = list_books_by_owner(owner = owner, db = db, offset = offset,limit = limit)
+    books, total  = list_books_by_owner(owner = owner, db = db, offset = offset,limit = limit)
     # data_book = object_as_dict(books)
     # model_book = Book(**data_book)
     # model_book.detail_adding_book = json.loads(book)
-    return books
+    return books, total 
 
 
 def user_get_book_by_id(owner:str, id: str, db: Session) : 

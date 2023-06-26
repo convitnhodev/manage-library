@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 
+
+from schemas.common import ListReturn
 from schemas.cards import CardCreate
 from db.session import get_db
 
@@ -55,7 +57,7 @@ def delete_card_by_id(id: int, db: Session = Depends(get_db), current_user: User
     return card
 
 
-@router.put("{id}")
+@router.put("/{id}")
 def update_card(id: int, card: CardCreate, db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
     try:
         card = user_update_card(card=card, db=db, owner=current_user.owner, id=id)
@@ -79,5 +81,6 @@ def list_cards(
     is_active: bool = False, 
     db: Session = Depends(get_db),
     current_user: User=Depends(get_current_user_from_token)):
-    cards_return = user_list_cards(owner=current_user.owner, db=db, offset=offset, limit=limit, is_active=is_active)
-    return cards_return
+    cards_return, total = user_list_cards(owner=current_user.owner, db=db, offset=offset, limit=limit, is_active=is_active)
+
+    return ListReturn(data=cards_return, total=total)

@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
 from schemas.cards import CardModel
 from db.models.cards import Card
@@ -68,11 +69,13 @@ def get_card_by_owner(owner: str, db: Session):
 def list_card_by_owner(owner: str, db: Session, offset: int , limit: int, is_active: bool):
     if not is_active :
         cards  = db.query(Card).filter(Card.owner == owner).offset(offset).limit(limit).all()
-        return cards
+        total_records = db.query(func.count(Card.id)).filter(Card.owner == owner).scalar()
+        return cards, total_records
     current_time = datetime.now()
     condition = or_(Card.expires_at > current_time, Card.expires_at.is_(None))
     cards = db.query(Card).filter(and_(Card.owner == owner, condition)).offset(offset).limit(limit).all()
-    return cards
+    total_records = db.query(func.count(Card.id)).filter(and_(Card.owner == owner, condition)).scalar()
+    return cards, total_records
 
 
 
