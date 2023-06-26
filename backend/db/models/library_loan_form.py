@@ -12,11 +12,8 @@ class LibraryLoanForm(Base):
     expires_at = Column(Date, nullable=True)
     created_by = Column(String(50), nullable=True)
     updated_by = Column(String(50), nullable=True)
-    name_reader = Column(String(50), nullable=True)
+    id_card = Column(Integer, nullable=False)
+    ids_books = Column(JSON, nullable=False)
 
-    # book_name = Column(String(50), nullable=True)
-    # category = Column(String(50), nullable=False)
-    # author = Column(String(50), nullable=False)
-    detail_book = Column(JSON, nullable=True)
     owner = Column(String(50), nullable=False)
     

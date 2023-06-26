@@ -15,7 +15,7 @@ class Book(Base):
     created_by = Column(String(50), nullable=True)
     updated_by = Column(String(50), nullable=True)
     numbers = Column(Integer, nullable=True)
-    amount_borrowed = Column(String(50), nullable=True, default=0)
+    amount_borrowed = Column(Integer, nullable=True, default=0)
     #detail_adding_book = Column(JSON, nullable=True)
 
     

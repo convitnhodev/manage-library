@@ -14,6 +14,8 @@ class DetailAddingBook(BaseModel):
     publisher: str 
     numbers: int 
     owner: Optional[str]
+    amount_borrowed: Optional[int]
+
     def json(self):
         return self.dict()
 

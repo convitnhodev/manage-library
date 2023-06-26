@@ -16,17 +16,25 @@ class DetailBook(BaseModel):
         return self.dict()
 
 class LibraryLoanFormModel(BaseModel): 
-    detail_book: List[DetailBook]
+    # detail_book: List[DetailBook]
+    # created_at: Optional[datetime]
+    # updated_at: Optional[datetime]
+    # owner: Optional[str]
+    # expires_at: Optional[datetime]
+    # name_reader: str 
+
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
     owner: Optional[str]
     expires_at: Optional[datetime]
-    name_reader: str 
+    id_card: int 
+    ids_books: List[int]
 
 
-class LibraryLoanFormCreate(BaseModel): 
-    detail_book: List[DetailBook]
-    name_reader: str 
+
+# class LibraryLoanFormCreate(BaseModel): 
+#     detail_book: List[DetailBook]
+#     name_reader: str 
 
 class LibraryLoanFormCreate(BaseModel): 
     id_card: int 
