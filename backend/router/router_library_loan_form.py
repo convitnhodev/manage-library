@@ -20,7 +20,7 @@ def create_new_library_loan_form(form: LibraryLoanFormCreate, db: Session= Depen
     except: 
         code = detail_error.CODE_CANNOT_CREATE
         raise HTTPException(status_code = code ,
-                            detail_error = detail_error.map_err[code])
+                            detail = detail_error.map_err[code])
    
 
 @router.get("")
