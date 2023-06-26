@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from db.base_class import Base
 
 class Rule(Base):
-    id = Column(String(50), primary_key=True)
+    id = Column(Integer, primary_key=True)
     owner = Column(String(50), nullable=True)
     min_age = Column(Integer, nullable=True)
     max_age = Column(Integer, nullable=True)
@@ -16,6 +16,5 @@ class Rule(Base):
     max_day_borrow = Column(Integer, nullable=True)
     max_items_borrow = Column(Integer, nullable=True)
     created_at = Column(DateTime, nullable=True)
-
 
 

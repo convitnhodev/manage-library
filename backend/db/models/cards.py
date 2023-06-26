@@ -4,14 +4,14 @@ from sqlalchemy.orm import relationship
 from db.base_class import Base
 
 class Card(Base):
-    id = Column(String(50), primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False)
     type = Column(String(50), nullable=False)
     dob = Column(DateTime, nullable=False)
     address = Column(String(50), nullable=False)
     email = Column(String(50), nullable=False)
     created_at = Column(DateTime(timezone=True), default=func.now())
-    updated_at = Column(DateTime(timezone=True), nullable=True)
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=func.now())
     expires_at = Column(Date, nullable=True)
     created_by = Column(String(50), nullable=True)
     updated_by = Column(String(50), nullable=True)

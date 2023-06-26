@@ -6,7 +6,8 @@ from core.hashing import Hasher
 
 
 
-def create_new_user(user: UserCreate, db:Session, owner: str): 
+def create_new_user(user: UserCreate, db:Session, owner: str, is_admin: bool):
+     
     user = User (
         name = user.name,
         username = user.username, 
@@ -16,15 +17,14 @@ def create_new_user(user: UserCreate, db:Session, owner: str):
         email = user.email,
         password = Hasher.get_password_hash(user.password),
         is_active = True,
-        is_supperuser = False,
-        owner = owner
+        is_supperuser = is_admin,
+        owner = owner, 
+        created_by = owner
     )
-
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-    return user
-
-
-
-
+    try: 
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return user 
+    except Exception as e:
+        raise e 
