@@ -1,0 +1,11 @@
+.loanSlips {
+  width: 100%;
+  text-align: center;
+  margin-top: 2rem;
+  justify-items: flex-end;
+
+  .loanSlips__title {
+    display: flex;
+    justify-content: space-around;
+  }
+}

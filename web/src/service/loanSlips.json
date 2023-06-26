@@ -1,0 +1,96 @@
+{
+  "loanSlips": [
+    {
+      "id": 1,
+      "borrower": "Nguyễn Văn A",
+      "borrowerId": 1,
+      "books": [
+        {
+          "id": 1,
+          "name": "Sách 1",
+          "category": "Thể loại 1",
+          "author": "Tác giả 1",
+          "status": true,
+          "publicCationYear": 2021,
+          "publisher": "Nhà xuất bản 1",
+          "importDate": "2021-08-01"
+        },
+        {
+          "id": 2,
+          "name": "Sách 2",
+          "category": "Thể loại 2",
+          "author": "Tác giả 2",
+          "status": false,
+          "publicCationYear": 2021,
+          "publisher": "Nhà xuất bản 2",
+          "importDate": "2021-08-01"
+        }
+      ],
+      "borrowDate": "2021-08-01'"
+    },
+    {
+      "id": 2,
+      "borrower": "Nguyễn Văn B",
+      "borrowerId": 2,
+      "books": [
+        {
+          "id": 1,
+          "name": "Sách 1",
+          "category": "Thể loại 1",
+          "author": "Tác giả 1",
+          "status": true,
+          "publicCationYear": 2021,
+          "publisher": "Nhà xuất bản 1",
+          "importDate": "2021-08-01"
+        }
+      ],
+      "borrowDate": "2021-08-01'"
+    },
+    {
+      "id": 3,
+      "borrower": "Nguyễn Văn C",
+      "borrowerId": 3,
+      "books": [
+        {
+          "id": 2,
+          "name": "Sách 2",
+          "category": "Thể loại 2",
+          "author": "Tác giả 2",
+          "status": false,
+          "publicCationYear": 2021,
+          "publisher": "Nhà xuất bản 2",
+          "importDate": "2021-08-01"
+        }
+      ],
+      "borrowDate": "2021-08-01'"
+    },
+    {
+      "id": 4,
+      "borrower": "Nguyễn Văn D",
+      "borrowerId": 4,
+      "books": [
+        {
+          "id": 5,
+          "name": "Sách 5",
+          "category": "Thể loại 1",
+          "author": "Tác giả 3",
+          "status": false,
+          "publicCationYear": 2021,
+          "publisher": "Nhà xuất bản 5",
+          "importDate": "2021-09-01"
+        },
+        {
+          "id": 6,
+          "name": "Sách 6",
+          "category": "Thể loại 4",
+          "author": "Tác giả 1",
+          "status": false,
+          "publicCationYear": 2021,
+          "publisher": "Nhà xuất bản 6",
+          "importDate": "2021-09-01"
+        }
+      ],
+      "borrowDate": "2021-08-01'"
+    }
+  ]
+}

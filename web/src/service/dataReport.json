@@ -1,0 +1,12 @@
+{
+  "dataReport": {
+    "visitors": 532,
+    "borrowed": 142,
+    "returned": 100,
+    "newMembers": 42
+  },
+  "dataChart": {
+    "visitors": [65, 59, 80, 81],
+    "borrowers": [28, 48, 40, 19]
+  }
+}

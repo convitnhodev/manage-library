@@ -1,0 +1,19 @@
+* trang chủ:
+ - bảng các sách đang cho mượn
+ - thống kê trong tháng(hoặc tuần) (số sách được mượn, số người mượn, số người mới làm thẻ)
+* sách:
+ - thêm sách, xóa sách, cập nhật thông tin sách
+ - tra cứu sách theo tên và thể loại => danh sách sách (xem BM3 phân trang 10 sách/page)
+ - xem thông tin sách ( xem BM2 )
+* phiếu mượn:
+ - danh sách các phiếu mượn phân trang 10 phiếu/page (tên người mượn, ngày mượn và số lượng sách mượn)
+ - xem chi tiết phiếu mượn ( xem BM4 )
+ - lập phiếu mượn ( xem BM4, QĐ4 )
+ - cập nhật phiếu mượn khi người mượn trả sách (xóa sách đó khỏi phiếu mượn và cập nhật tình trạng sách)
+ - xóa phiếu mượn nếu trả hết sách
+* đọc giả:
+ - bảng danh sách đọc giả
+ - thêm, xóa đọc giả
+ - xem chi tiết thông tin đọc giả
+* quy định
+ - cập nhật các quy định (QĐ6)

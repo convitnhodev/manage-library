@@ -1,0 +1,11 @@
+{
+  "rule": {
+    "minMemberAge": 18,
+    "maxMemberAge": 35,
+    "periodValidCard": 6,
+    "categoryBooks": ["A", "B", "C"],
+    "publicationYearGap": 8,
+    "maxBookCanBorrow": 5,
+    "maxDayCanBorrow": 4
+  }
+}

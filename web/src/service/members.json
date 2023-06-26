@@ -1,0 +1,58 @@
+{
+  "members": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "type": "X",
+      "birthday": "1990-01-01",
+      "address": "123 Main St, Anytown, USA",
+      "email": "abc.xyz",
+      "createDate": "2019-01-01"
+    },
+    {
+      "id": 2,
+      "name": "John Doe 2",
+      "type": "X",
+      "birthday": "1990-01-01",
+      "address": "123 Main St, Anytown, USA",
+      "email": "abc.xyz",
+      "createDate": "2019-01-01"
+    },
+    {
+      "id": 3,
+      "name": "John Doe 3",
+      "type": "Y",
+      "birthday": "1990-01-01",
+      "address": "123 Main St, Anytown, USA",
+      "email": "abc.xyz",
+      "createDate": "2019-01-01"
+    },
+    {
+      "id": 4,
+      "name": "John Doe 4",
+      "type": "X",
+      "birthday": "1990-01-01",
+      "address": "123 Main St, Anytown, USA",
+      "email": "abc.xyz",
+      "createDate": "2019-01-01"
+    },
+    {
+      "id": 5,
+      "name": "John Doe",
+      "type": "Y",
+      "birthday": "1990-01-01",
+      "address": "123 Main St, Anytown, USA",
+      "email": "abc.xyz",
+      "createDate": "2019-01-01"
+    },
+    {
+      "id": 6,
+      "name": "John Doe 6",
+      "type": "X",
+      "birthday": "1990-01-01",
+      "address": "123 Main St, Anytown, USA",
+      "email": "abc.xyz",
+      "createDate": "2019-01-01"
+    }
+  ]
+}
