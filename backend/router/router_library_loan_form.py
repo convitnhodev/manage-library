@@ -7,6 +7,7 @@ from router.router_login import get_current_user_from_token
 from db.repository.rules import create_rule_by_owner
 from biz.library_loan_form import create_library_loan_form,user_list_library_loan_form_by_owner 
 from biz.library_loan_form import check_number_of_book,user_get_librara_by_owner_and_id 
+from biz.library_loan_form import user_delete_library_loan_form
 
 from const import detail_error 
 
@@ -19,6 +20,17 @@ def create_new_library_loan_form(form: LibraryLoanFormCreate, db: Session= Depen
         return form_return
     except: 
         code = detail_error.CODE_CANNOT_CREATE
+        raise HTTPException(status_code = code ,
+                            detail = detail_error.map_err[code])
+   
+
+@router.delete("/{id}")
+def delete_library_loan_forms(id:int ,db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
+    try:
+        form_return = user_delete_library_loan_form(id=id, db=db, owner= current_user.owner)
+        return form_return
+    except: 
+        code = detail_error.CODE_CANNOT_DELETE
         raise HTTPException(status_code = code ,
                             detail = detail_error.map_err[code])
    

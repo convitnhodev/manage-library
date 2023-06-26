@@ -59,11 +59,12 @@ def delete_library_loan_form(id: int, owner: str, db: Session):
     ).first()
 
 
-    if existing_form is not None: 
-        raise detail_error.CODE_ENTITY_EXISTS
+    if existing_form is  None: 
+        raise detail_error.CODE_CANNOT_DELETE
     
     db.delete(existing_form)
     db.commit()
+    return existing_form
 
 
 
