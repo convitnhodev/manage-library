@@ -90,4 +90,8 @@ def user_list_library_loan_form_by_owner(owner: str, db: Session):
 
 def user_get_librara_by_owner_and_id(owner: str, id: int, db: Session):
     form = get_library_load_form_by_id_and_owner(owner=owner, id=id, db=db)
-    return form 
+    form_return = LibraryLoanForm(**form)
+    form_return.ids_books = json.loads(form.ids_books)
+
+    return form_return
+    
