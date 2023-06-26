@@ -9,7 +9,9 @@ from db.repository.users import create_new_user
 from authrization.iam import authrization
 from const import resource, detail_error
 from biz.user import admin_list_users
-
+from biz.rule import user_create_rule
+from schemas.rules import RuleCreate
+from const import default
 
 router = APIRouter()
 
@@ -35,6 +37,24 @@ def create_user(user: UserCreate, db: Session= Depends(get_db)):
     if authrization.enforce(user.username, resource.RESOUCE_REGISTRATION, resource.ACTION_WRITE):
         try: 
             user = create_new_user(user, db, owner=user.username, is_admin=True)
+            rule_default = RuleCreate(
+                min_age = default.MIN_AGE, 
+                max_age = default.MAX_AGE, 
+                time_effective_card = default.TIME_EXPIRATION_SECONDS_CARD, 
+                detail_type = default.DETAIL_TYPE, 
+                detail_category = default.DETAIL_CATEGORY, 
+                numbers_category = len(default.DETAIL_CATEGORY), 
+                max_day_borrow = default.DAY_BORROW, 
+                max_items_borrow = default.MAX_ITEMS_BORROW, 
+                distance_year = default.DISTANCE_YEAR,
+            )
+
+            user_create_rule(rule_create=rule_default, db=db, owner=user.username)
+
+            
+
+
+
             return user
         except Exception as e: 
             code = detail_error.CODE_USER_EXISTS
