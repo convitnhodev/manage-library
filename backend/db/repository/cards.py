@@ -14,7 +14,7 @@ def create_new_card(card: CardModel, db:Session):
     db.add(new_card)
     db.commit()
     db.refresh(new_card)
-    return card
+    return new_card
 
 
 def update_card_by_id(card: CardModel, db:Session, id: int): 

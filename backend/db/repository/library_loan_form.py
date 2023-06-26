@@ -14,14 +14,10 @@ def create_new_library_loan_form(form: LibraryLoanFormModel, db:Session):
     # form_data = form.dict()  # Chuyển đổi thành từ điển
     # new_form = LibraryLoanForm(**form_data)  
     # new_form.detail_book = json.dumps(form.detail_book, cls=CustomJSONEncoder)
-
-
-
-
     existing_form = db.query(LibraryLoanForm).filter(
         LibraryLoanForm.owner == form.owner,
         LibraryLoanForm.id_card == form.id_card
-    )
+    ).first()
 
     if existing_form is not None: 
         raise detail_error.CODE_ENTITY_EXISTS
@@ -54,6 +50,22 @@ def get_library_load_form_by_id_and_owner(owner: str, id: str, db: Session):
         LibraryLoanForm.id == id
     ).first()
     return form
+
+
+def delete_library_loan_form(id: int, owner: str, db: Session): 
+    existing_form = db.query(LibraryLoanForm).filter(
+        LibraryLoanForm.owner == owner,
+        LibraryLoanForm.id == id
+    ).first()
+
+
+    if existing_form is  None: 
+        raise detail_error.CODE_CANNOT_DELETE
+    
+    db.delete(existing_form)
+    db.commit()
+    return existing_form
+
 
 
 
