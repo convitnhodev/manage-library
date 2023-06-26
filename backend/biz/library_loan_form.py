@@ -34,6 +34,7 @@ def delete_library_loan_form(form_delete: LibraryLoanFormCreate, db: Session, ow
     else: 
         rule = rules[0]
 
+    
 
     for book_id in form.ids_books: 
         borrow_book_by_id(book_id= book_id, number=1, db=db, owner=owner)

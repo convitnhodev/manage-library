@@ -8,6 +8,7 @@ from router.router_login import get_current_user_from_token
 from db.repository.users import create_new_user
 from authrization.iam import authrization
 from const import resource, detail_error
+from biz.user import admin_list_users
 
 
 router = APIRouter()
@@ -41,4 +42,13 @@ def create_user(user: UserCreate, db: Session= Depends(get_db)):
     raise HTTPException(status_code = code,
                         detail=detail_error.map_err[code])
 
-    
+
+@router.get("/admin/users")
+def list_users(db:  Session=Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
+    if not current_user.is_supperuser : 
+        code = detail_error.CODE_UNAUTHORIZED
+        raise HTTPException(status_code =  code ,
+                            detail = detail_error.map_err[err]) 
+  
+    users = admin_list_users(db=db, owner=current_user.owner)
+    return users
