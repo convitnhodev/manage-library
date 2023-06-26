@@ -36,7 +36,7 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm=Depends(),
     return {
         "access_token": access_token,
         "token_type": "Bearer",
-        "expiresIn": access_token_expire,
+        "expiresIn": settings.ACCESS_TOKEN_EXPIRATION_EXPIRE,
         "name": user.name,
     }
 

@@ -11,7 +11,7 @@ class TypeCard(str, Enum):
 
 class CardCreate(BaseModel): 
     name: str 
-    type: TypeCard
+    type: str
     dob: datetime
     address: str
     email: EmailStr
@@ -19,7 +19,7 @@ class CardCreate(BaseModel):
 
 class CardModel(BaseModel): 
     name: str 
-    type: TypeCard
+    type: str
     dob: datetime
     address: str
     email: EmailStr
