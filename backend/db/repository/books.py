@@ -52,3 +52,24 @@ def delete_book_by_id(id: int, owner: str, db: Session) -> Book:
 
     return None
 
+
+def update_book_by_id(book: DetailAddingBook, db:Session, id: int, updated_by: str):
+    existing_book = db.query(Book).filter(Book.owner == book.owner, Book.id == id).first()
+    if existing_book is None: 
+        return None
+    
+    existing_book.book_name = book.book_name
+    existing_book.category = book.category
+    existing_book.author = book.author
+    existing_book.year_of_publication = book.year_of_publication
+    existing_book.publisher = book.publisher
+    existing_book.updated_by = updated_by
+    existing_book.numbers = book.numbers
+
+
+    db.commit()
+    db.refresh(existing_book)
+    return existing_book
+
+
+

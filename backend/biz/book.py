@@ -8,6 +8,7 @@ from db.repository.books import list_books_by_owner
 from db.repository.books import get_book_by_id
 from db.repository.books import delete_book_by_id
 from db.repository.rules import list_rule_by_owner
+from db.repository.books import update_book_by_id
 from schemas.helper import object_as_dict
 from const import detail_error 
 from datetime import date, datetime, timedelta
@@ -76,3 +77,20 @@ def user_get_book_by_id(owner:str, id: str, db: Session) :
 def user_delete_book_by_id(owner:str, id: str, db: Session) : 
     book = delete_book_by_id(owner=owner, id=id, db = db)
     return book
+
+
+def user_update_book_by_id(owner:str, id: str, db: Session, book: DetailAddingBook, updated_by: str):
+    rules = list_rule_by_owner(owner, db)
+    if len(rules) == 0:
+        rule = None
+    else :
+        rule = rules[0]
+
+    is_valid = is_book_valid(book=book, rule=rule)
+    if is_valid != detail_error.CODE_VALID: 
+        return is_valid
+    
+    book.owner = owner
+    book = update_book_by_id(id=id, db=db, book=book, updated_by=updated_by)
+    return book 
+    
