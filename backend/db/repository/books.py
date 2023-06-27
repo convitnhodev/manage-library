@@ -37,6 +37,12 @@ def list_books_by_owner(owner: str, db: Session, offset: int, limit: int):
     total_records = db.query(func.count(Book.id)).filter(Book.owner == owner).scalar()
     return books, total_records
 
+
+def list_books_borred_by_owner(owner: str, db: Session, offset: int, limit: int):
+    books = db.query(Book).filter(Book.owner == owner, Book.amount_borrowed > 0).offset(offset).limit(limit).all()
+    total_records = db.query(func.count(Book.id)).filter(Book.owner == owner).scalar()
+    return books, total_records
+
 def get_book_by_id(id: int,owner: str, db: Session):
     book = db.query(Book).filter(Book.id == id, Book.owner == owner).first()
     return book

@@ -4,7 +4,7 @@ from db.models.rules import Rule
 import json
 from sqlalchemy.orm import Session
 from db.repository.books import add_book
-from db.repository.books import list_books_by_owner
+from db.repository.books import list_books_by_owner, list_books_borred_by_owner
 from db.repository.books import get_book_by_id
 from db.repository.books import delete_book_by_id
 from db.repository.rules import list_rule_by_owner
@@ -76,6 +76,14 @@ def user_create_books(book_create: BookCreate, db:Session, owner: str):
 
 def user_list_book_by_owner(owner: str, db: Session,offset: int = 0, limit: int = 100):
     books, total  = list_books_by_owner(owner = owner, db = db, offset = offset,limit = limit)
+    # data_book = object_as_dict(books)
+    # model_book = Book(**data_book)
+    # model_book.detail_adding_book = json.loads(book)
+    return books, total 
+
+
+def user_list_book_borrowed_by_owner(owner: str, db: Session,offset: int = 0, limit: int = 100):
+    books, total  = list_books_borred_by_owner(owner = owner, db = db, offset = offset,limit = limit)
     # data_book = object_as_dict(books)
     # model_book = Book(**data_book)
     # model_book.detail_adding_book = json.loads(book)
