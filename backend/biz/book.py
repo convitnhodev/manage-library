@@ -12,6 +12,8 @@ from db.repository.books import update_book_by_id
 from schemas.helper import object_as_dict
 from const import detail_error 
 from datetime import date, datetime, timedelta
+from const import default
+from db.repository.logs import create_log
 
 def is_book_valid(book: DetailAddingBook, rule: Rule):
     if rule is None: 
@@ -50,6 +52,12 @@ def user_create_books(book_create: BookCreate, db:Session, owner: str):
         book_added = add_book(book, db)
         result_added_book.append(book_added)
 
+    try: 
+        create_log(owner=owner, 
+                   actor=owner, action=default.ACTION_CREATE_BOOk, db=db)
+    except: 
+        return result_added_book
+
     return result_added_book
 
     # book = BookModel(**book_create.dict())
@@ -76,6 +84,11 @@ def user_get_book_by_id(owner:str, id: str, db: Session) :
 
 def user_delete_book_by_id(owner:str, id: str, db: Session) : 
     book = delete_book_by_id(owner=owner, id=id, db = db)
+    try: 
+        create_log(owner=owner, 
+                   actor=owner, action=default.ACTION_DELETE_BOOK, db=db)
+    except: 
+        return book
     return book
 
 
@@ -92,5 +105,10 @@ def user_update_book_by_id(owner:str, id: str, db: Session, book: DetailAddingBo
     
     book.owner = owner
     book = update_book_by_id(id=id, db=db, book=book, updated_by=updated_by)
+    try: 
+        create_log(owner=owner, 
+                   actor=owner, action=default.ACTION_UPDATE_BOOk, db=db)
+    except: 
+        return book
     return book 
     

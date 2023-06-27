@@ -7,8 +7,8 @@ from db.repository.rules import get_rule_by_onwer_and_id
 from db.repository.rules import delete_rule_by_onwer_and_id
 from db.repository.rules import update_rule_by_owner_and_id
 from db.repository.rules import list_rule_by_owner
-
-
+from db.repository.logs import create_log
+from const import default
 def convert_rule_from_DB_to_show(rule: Rule):
     show = RuleShow(
         min_age = rule.min_age,
@@ -29,6 +29,11 @@ def user_create_rule(rule_create: RuleCreate, db:Session, owner: str):
     rule = RuleBase(**rule_create.dict())
     rule.owner = owner
     rule = create_rule_by_owner(rule, db)
+    try: 
+        create_log(owner=owner, 
+                   actor=owner, action=default.ACTION_CREATE_RULE, db=db)
+    except: 
+        return convert_rule_from_DB_to_show(rule)
     return convert_rule_from_DB_to_show(rule)
 
 
@@ -54,6 +59,10 @@ def user_delete_rule_by_id(owner: str, id: int, db: Session):
     if rule is None: 
         return None 
     rule_show = convert_rule_from_DB_to_show(rule)
+    try:
+        create_log(owner=owner, db=db, action=default.ACTION_DELETE_RULE, actor=owner)
+    except: 
+        return rule_show
     return rule_show
 
 
@@ -65,6 +74,12 @@ def user_update_rule_by_id(owner: str, id: int, rule_update: RuleCreate, db: Ses
         rule = update_rule_by_owner_and_id(owner=owner, id = id, rule = rule, db = db)
         if rule is None: 
             return None
+        
+
+        try:
+            create_log(owner=owner, db=db, action=default.ACTION_UPDATE_RULE, actor=owner)
+        except: 
+            return convert_rule_from_DB_to_show(rule)
         return convert_rule_from_DB_to_show(rule)
     except Exception as e:
         raise e 
