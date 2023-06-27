@@ -29,6 +29,7 @@ class RuleCreate(BaseModel):
 
 
 class RuleShow(BaseModel): 
+    id: int 
     min_age: int
     max_age: int 
     time_effective_card: int 

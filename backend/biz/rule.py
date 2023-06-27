@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from db.repository.rules import create_rule_by_owner
 from db.repository.rules import get_rule_by_onwer_and_id
 from db.repository.rules import delete_rule_by_onwer_and_id
-from db.repository.rules import update_rule_by_owner_and_id
+from db.repository.rules import update_rule_by_owner_and_id, update_rule_by_owner
 from db.repository.rules import list_rule_by_owner
 from db.repository.logs import create_log
 import threading
@@ -13,6 +13,7 @@ from biz.log import log_task
 from const import default
 def convert_rule_from_DB_to_show(rule: Rule):
     show = RuleShow(
+        id = rule.id,
         min_age = rule.min_age,
         max_age = rule.max_age, 
         time_effective_card = rule.time_effective_card, 
@@ -81,6 +82,28 @@ def user_update_rule_by_id(owner: str, id: int, rule_update: RuleCreate, db: Ses
     rule.owner = owner
     try: 
         rule = update_rule_by_owner_and_id(owner=owner, id = id, rule = rule, db = db)
+        if rule is None: 
+            return None
+        
+
+        # try:
+        #     create_log(owner=owner, db=db, action=default.ACTION_UPDATE_RULE, actor=owner)
+        # except: 
+        #     return convert_rule_from_DB_to_show(rule)
+        log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_UPDATE_RULE, db))
+        log_thread.start()
+        return convert_rule_from_DB_to_show(rule)
+    except Exception as e:
+        raise e 
+
+   
+
+
+def user_update_rule_belong(owner: str, rule_update: RuleCreate, db: Session): 
+    rule = RuleBase(**rule_update.dict())
+    rule.owner = owner
+    try: 
+        rule = update_rule_by_owner(owner=owner, rule = rule, db = db)
         if rule is None: 
             return None
         
