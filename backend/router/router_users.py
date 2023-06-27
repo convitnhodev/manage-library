@@ -52,8 +52,7 @@ def create_user(user: UserCreate, db: Session= Depends(get_db)):
             )
 
             user_create_rule(rule_create=rule_default, db=db, owner=user.username)
-
-
+            
             return user
         except Exception as e: 
             code = detail_error.CODE_USER_EXISTS

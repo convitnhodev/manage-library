@@ -13,6 +13,7 @@ class UserCreate(BaseModel):
 
 
 class UserShow(BaseModel):
+    id: int 
     username: str
     name: str 
     address: str
