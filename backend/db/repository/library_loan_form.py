@@ -54,8 +54,8 @@ def get_library_load_form_by_id_and_owner(owner: str, id: str, db: Session):
 
 def delete_library_loan_form(id: int, owner: str, db: Session): 
     existing_form = db.query(LibraryLoanForm).filter(
-        LibraryLoanForm.owner == owner,
-        LibraryLoanForm.id == id
+        LibraryLoanForm.id == id,
+        LibraryLoanForm.owner == owner
     ).first()
 
 

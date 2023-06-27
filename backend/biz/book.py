@@ -20,7 +20,7 @@ def is_book_valid(book: DetailAddingBook, rule: Rule):
     if today.year - book.year_of_publication > rule.distance_year: 
         return detail_error.DETAIL_INVALID_YEAR_PUBLICATION
     
-    if book.category not in json.load(rule.detail_category): 
+    if book.category not in json.loads(rule.detail_category): 
         return detail_error.CODE_INVALID_CATEGORY_BOOK
     return detail_error.CODE_VALID
 
