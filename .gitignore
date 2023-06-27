@@ -1,2 +1,5 @@
 .idea/
 .vscode/
+backend/.vscode
+backend/__pycache__
+backend/.idea

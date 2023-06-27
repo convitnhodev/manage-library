@@ -11,7 +11,9 @@ from const import resource, detail_error
 from biz.user import admin_list_users
 from biz.rule import user_create_rule
 from schemas.rules import RuleCreate
+from datetime import datetime
 from const import default
+from db.repository import logs 
 
 router = APIRouter()
 
@@ -40,7 +42,7 @@ def create_user(user: UserCreate, db: Session= Depends(get_db)):
             rule_default = RuleCreate(
                 min_age = default.MIN_AGE, 
                 max_age = default.MAX_AGE, 
-                time_effective_card = default.TIME_EXPIRATION_SECONDS_CARD, 
+                time_effective_card = default.TIME_EXPIRATION_CARD, 
                 detail_type = default.DETAIL_TYPE, 
                 detail_category = default.DETAIL_CATEGORY, 
                 numbers_category = len(default.DETAIL_CATEGORY), 
@@ -75,3 +77,7 @@ def list_users(db:  Session=Depends(get_db), current_user: User=Depends(get_curr
   
     users = admin_list_users(db=db, owner=current_user.owner)
     return users
+
+@router.get("/admin/logs") 
+def list_log(action: str = None, start: datetime = None, end: datetime = None,db: Session=Depends(get_db),current_user: User=Depends(get_current_user_from_token)):
+    return logs.list_log(owner=current_user.owner, start_time=start, end_time=end, action=action, db=db)

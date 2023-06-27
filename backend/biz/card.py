@@ -11,6 +11,7 @@ from datetime import date, datetime, timedelta
 import json 
 from const import detail_error 
 from const import default
+from db.repository.logs import create_log
 
 
 
@@ -52,12 +53,17 @@ def user_create_new_card(card: CardCreate, db: Session, owner: str):
     if rule is not None:
         time_effective_card = rule.time_effective_card
     else : 
-        time_effective_card = default.TIME_EXPIRATION_SECONDS_CARD
+        time_effective_card = default.TIME_EXPIRATION__CARD
     expire = current_time + timedelta(days=time_effective_card)
     card = CardModel(**card.dict())
     card.owner = owner
     card.expires_at = expire
     card = create_new_card(card, db)
+    try: 
+        create_log(owner=owner, 
+                   actor=owner, action=default.ACTION_CREATE_CARD, db=db)
+    except: 
+        return card
     return card
 
 
@@ -75,11 +81,16 @@ def user_update_card(card: CardCreate, db: Session, owner: str, id: int):
     # if rule is not None:
     #     time_effective_card = rule.time_effective_card
     # else : 
-    #     time_effective_card = default.TIME_EXPIRATION_SECONDS_CARD
+    #     time_effective_card = default.TIME_EXPIRATION_CARD
     # expire = current_time + timedelta(days=time_effective_card)
     card = CardModel(**card.dict())
     card.owner = owner
     card = update_card_by_id(card, db, id)
+    try: 
+        create_log(owner=owner, 
+                   actor=owner, action=default.ACTION_UPDATE_CARD, db=db)
+    except: 
+        return card
     return card
 
 
@@ -101,4 +112,11 @@ def user_delete_card_by_id_and_owner(owner: str, db: Session, id: int):
     card = delete_card_by_id_and_owner(id_card=id,owner=owner, db=db)
     if card is None: 
         return None
+    
+
+    try: 
+        create_log(owner=owner, 
+                   actor=owner, action=default.ACTION_DETELE_CARD, db=db)
+    except: 
+        return card
     return card
