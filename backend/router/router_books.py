@@ -61,7 +61,7 @@ def user_delete_book(id: int, db: Session = Depends(get_db), current_user: User=
 @router.put("/{id}")
 def update_book(id: int, book: DetailAddingBook, db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
     try: 
-        book = user_update_book_by_id(id=id, owner=current_user.username, book=book, db=db, updated_by=current_user.username)
+        book = user_update_book_by_id(id=id, owner=current_user.owner, book=book, db=db, updated_by=current_user.username)
         if book is not None: 
             return book 
         code = detail_error.CODE_RECORD_NOT_FOUND
