@@ -8,7 +8,7 @@ from router.router_login import get_current_user_from_token
 from db.repository.users import create_new_user
 from authrization.iam import authrization
 from const import resource, detail_error
-from biz.user import admin_list_users
+from biz.user import admin_list_users, admin_delete_user
 from biz.rule import user_create_rule
 from schemas.rules import RuleCreate
 from datetime import datetime
@@ -52,7 +52,7 @@ def create_user(user: UserCreate, db: Session= Depends(get_db)):
             )
 
             user_create_rule(rule_create=rule_default, db=db, owner=user.username)
-            
+
             return user
         except Exception as e: 
             code = detail_error.CODE_USER_EXISTS
@@ -73,6 +73,25 @@ def list_users(db:  Session=Depends(get_db), current_user: User=Depends(get_curr
   
     users = admin_list_users(db=db, owner=current_user.owner)
     return users
+
+@router.delete("/admin/users/{id}")
+def delete_user(id: int, db:  Session=Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
+    if not current_user.is_supperuser : 
+        code = detail_error.CODE_UNAUTHORIZED
+        raise HTTPException(status_code =  code ,
+                            detail = detail_error.map_err[code]) 
+    
+    try:
+        admin_delete_user(db=db, owner=current_user.owner, id = id)
+        return "Delete success"
+
+    except: 
+        code = detail_error.CODE_RECORD_NOT_FOUND
+        raise HTTPException(status_code =  code ,
+                            detail = detail_error.map_err[code]) 
+    return id
+
+
 
 @router.get("/admin/logs") 
 def list_log(action: str = None, start: datetime = None, end: datetime = None,db: Session=Depends(get_db),current_user: User=Depends(get_current_user_from_token)):
