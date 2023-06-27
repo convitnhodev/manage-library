@@ -12,7 +12,8 @@ import json
 from const import detail_error 
 from const import default
 from db.repository.logs import create_log
-
+import threading
+from biz.log import log_task
 
 
 def calculate_age(date_of_birth):
@@ -37,6 +38,10 @@ def is_card_valid(card: CardCreate, rule: Rule):
         return detail_error.CODE_INVALID_TYPE
     return detail_error.CODE_VALID
 
+
+
+
+
 def user_create_new_card(card: CardCreate, db: Session, owner: str): 
     rules = list_rule_by_owner(owner, db)
     if len(rules) == 0:
@@ -59,11 +64,15 @@ def user_create_new_card(card: CardCreate, db: Session, owner: str):
     card.owner = owner
     card.expires_at = expire
     card = create_new_card(card, db)
-    try: 
-        create_log(owner=owner, 
-                   actor=owner, action=default.ACTION_CREATE_CARD, db=db)
-    except: 
-        return card
+    # try: 
+    #     log =create_log(owner=owner, 
+    #                actor=owner, action=default.ACTION_CREATE_CARD, db=db)
+    # except: 
+    #     return card
+
+
+    log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_CREATE_CARD, db))
+    log_thread.start()
     return card
 
 
@@ -86,11 +95,14 @@ def user_update_card(card: CardCreate, db: Session, owner: str, id: int):
     card = CardModel(**card.dict())
     card.owner = owner
     card = update_card_by_id(card, db, id)
-    try: 
-        create_log(owner=owner, 
-                   actor=owner, action=default.ACTION_UPDATE_CARD, db=db)
-    except: 
-        return card
+    # try: 
+    #     create_log(owner=owner, 
+    #                actor=owner, action=default.ACTION_UPDATE_CARD, db=db)
+    # except: 
+    #     return card
+    
+    log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_UPDATE_CARD, db))
+    log_thread.start()
     return card
 
 
@@ -114,9 +126,11 @@ def user_delete_card_by_id_and_owner(owner: str, db: Session, id: int):
         return None
     
 
-    try: 
-        create_log(owner=owner, 
-                   actor=owner, action=default.ACTION_DETELE_CARD, db=db)
-    except: 
-        return card
+    # try: 
+    #     create_log(owner=owner, 
+    #                actor=owner, action=default.ACTION_DETELE_CARD, db=db)
+    # except: 
+    #     return card
+    log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_DETELE_CARD, db))
+    log_thread.start()
     return card

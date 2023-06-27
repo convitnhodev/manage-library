@@ -8,6 +8,8 @@ from db.repository.rules import delete_rule_by_onwer_and_id
 from db.repository.rules import update_rule_by_owner_and_id
 from db.repository.rules import list_rule_by_owner
 from db.repository.logs import create_log
+import threading
+from biz.log import log_task
 from const import default
 def convert_rule_from_DB_to_show(rule: Rule):
     show = RuleShow(
@@ -29,11 +31,16 @@ def user_create_rule(rule_create: RuleCreate, db:Session, owner: str):
     rule = RuleBase(**rule_create.dict())
     rule.owner = owner
     rule = create_rule_by_owner(rule, db)
-    try: 
-        create_log(owner=owner, 
-                   actor=owner, action=default.ACTION_CREATE_RULE, db=db)
-    except: 
-        return convert_rule_from_DB_to_show(rule)
+    # try: 
+    #     create_log(owner=owner, 
+    #                actor=owner, action=default.ACTION_CREATE_RULE, db=db)
+    # except:
+
+     
+    #     return convert_rule_from_DB_to_show(rule)
+    
+    log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_CREATE_RULE, db))
+    log_thread.start()
     return convert_rule_from_DB_to_show(rule)
 
 
@@ -59,10 +66,12 @@ def user_delete_rule_by_id(owner: str, id: int, db: Session):
     if rule is None: 
         return None 
     rule_show = convert_rule_from_DB_to_show(rule)
-    try:
-        create_log(owner=owner, db=db, action=default.ACTION_DELETE_RULE, actor=owner)
-    except: 
-        return rule_show
+    # try:
+    #     create_log(owner=owner, db=db, action=default.ACTION_DELETE_RULE, actor=owner)
+    # except: 
+    #     return rule_show
+    log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_DELETE_RULE, db))
+    log_thread.start()
     return rule_show
 
 
@@ -76,10 +85,12 @@ def user_update_rule_by_id(owner: str, id: int, rule_update: RuleCreate, db: Ses
             return None
         
 
-        try:
-            create_log(owner=owner, db=db, action=default.ACTION_UPDATE_RULE, actor=owner)
-        except: 
-            return convert_rule_from_DB_to_show(rule)
+        # try:
+        #     create_log(owner=owner, db=db, action=default.ACTION_UPDATE_RULE, actor=owner)
+        # except: 
+        #     return convert_rule_from_DB_to_show(rule)
+        log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_UPDATE_RULE, db))
+        log_thread.start()
         return convert_rule_from_DB_to_show(rule)
     except Exception as e:
         raise e 
