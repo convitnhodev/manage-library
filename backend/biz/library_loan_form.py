@@ -12,6 +12,8 @@ from db.repository.books import update_book_amount_borrowed
 from db.repository.rules import list_rule_by_owner
 from const import detail_error, default
 from db.repository.logs import create_log
+import threading
+from biz.log import log_task
 
 def check_number_of_book(book_id:int, number: int, db:Session, owner: str): 
     book = get_book_by_id(id=book_id, owner=owner, db=db)
@@ -37,11 +39,15 @@ def user_delete_library_loan_form(id: int, db: Session, owner=str):
     form_return = LibraryLoanForm(**data_form)
     form_return.ids_books = json.loads(form.ids_books)
 
-    try: 
-        create_log(owner=owner, 
-                   actor=owner, action=default.ACTION_DETELE_LIBRARY_FORM, db=db)
-    except: 
-        return form_return
+    # try: 
+    #     create_log(owner=owner, 
+    #                actor=owner, action=default.ACTION_DETELE_LIBRARY_FORM, db=db)
+    # except: 
+    #     return form_return
+    
+
+    log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_DETELE_LIBRARY_FORM, db))
+    log_thread.start()
 
     return form_return
 
@@ -88,11 +94,15 @@ def create_library_loan_form(form_create: LibraryLoanFormCreate, db:Session, own
     form_return.ids_books = json.loads(form_created.ids_books)
 
 
-    try: 
-        create_log(owner=owner, 
-                   actor=owner, action=default.ACTION_CREATE_LIBRARY_FORM, db=db)
-    except: 
-        return form_return
+    # try: 
+    #     create_log(owner=owner, 
+    #                actor=owner, action=default.ACTION_CREATE_LIBRARY_FORM, db=db)
+    # except: 
+    #     return form_return
+    
+
+    log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_CREATE_LIBRARY_FORM, db))
+    log_thread.start()
     return form_return
 
 

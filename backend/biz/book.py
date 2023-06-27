@@ -14,6 +14,8 @@ from const import detail_error
 from datetime import date, datetime, timedelta
 from const import default
 from db.repository.logs import create_log
+import threading
+from biz.log import log_task
 
 def is_book_valid(book: DetailAddingBook, rule: Rule):
     if rule is None: 
@@ -22,7 +24,7 @@ def is_book_valid(book: DetailAddingBook, rule: Rule):
     if today.year - book.year_of_publication > rule.distance_year: 
         return detail_error.DETAIL_INVALID_YEAR_PUBLICATION
     
-    if book.category not in json.load(rule.detail_category): 
+    if book.category not in json.loads(rule.detail_category): 
         return detail_error.CODE_INVALID_CATEGORY_BOOK
     return detail_error.CODE_VALID
 
@@ -52,11 +54,14 @@ def user_create_books(book_create: BookCreate, db:Session, owner: str):
         book_added = add_book(book, db)
         result_added_book.append(book_added)
 
-    try: 
-        create_log(owner=owner, 
-                   actor=owner, action=default.ACTION_CREATE_BOOk, db=db)
-    except: 
-        return result_added_book
+    # try: 
+    #     create_log(owner=owner, 
+    #                actor=owner, action=default.ACTION_CREATE_BOOk, db=db)
+    # except: 
+    #     return result_added_book
+
+    log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_CREATE_BOOk, db))
+    log_thread.start()
 
     return result_added_book
 
@@ -84,11 +89,14 @@ def user_get_book_by_id(owner:str, id: str, db: Session) :
 
 def user_delete_book_by_id(owner:str, id: str, db: Session) : 
     book = delete_book_by_id(owner=owner, id=id, db = db)
-    try: 
-        create_log(owner=owner, 
-                   actor=owner, action=default.ACTION_DELETE_BOOK, db=db)
-    except: 
-        return book
+    # try: 
+    #     create_log(owner=owner, 
+    #                actor=owner, action=default.ACTION_DELETE_BOOK, db=db)
+    # except: 
+    #     return book
+    
+    log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_DELETE_BOOK, db))
+    log_thread.start()
     return book
 
 
@@ -105,10 +113,13 @@ def user_update_book_by_id(owner:str, id: str, db: Session, book: DetailAddingBo
     
     book.owner = owner
     book = update_book_by_id(id=id, db=db, book=book, updated_by=updated_by)
-    try: 
-        create_log(owner=owner, 
-                   actor=owner, action=default.ACTION_UPDATE_BOOk, db=db)
-    except: 
-        return book
+    # try: 
+    #     create_log(owner=owner, 
+    #                actor=owner, action=default.ACTION_UPDATE_BOOk, db=db)
+    # except: 
+    #     return book
+    
+    log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_UPDATE_BOOk, db))
+    log_thread.start()
     return book 
     
