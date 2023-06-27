@@ -9,7 +9,7 @@ def list_user_by_owner(owner: str, db: Session):
     return users
 
 def create_new_user(user: UserCreate, db:Session, owner: str, is_admin: bool):
-     
+      
     user = User (
         name = user.name,
         username = user.username, 
@@ -30,3 +30,12 @@ def create_new_user(user: UserCreate, db:Session, owner: str, is_admin: bool):
         return user 
     except Exception as e:
         raise e 
+    
+
+def delete_user(id: int, db:Session, owner:str): 
+    exist_user = db.query(User).filter(User.owner == owner, User.id ==id).first()
+    if exist_user is  None: 
+        return False
+    db.query(User).filter(User.owner == owner, User.id == id).delete()
+    db.commit()
+    return True

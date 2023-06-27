@@ -9,6 +9,7 @@ from const import detail_error
 from biz.rule import user_get_rule_by_id
 from biz.rule import user_delete_rule_by_id
 from biz.rule import user_update_rule_by_id
+from biz.rule import user_update_rule_belong
 from biz.rule import user_list_rule
 
 router = APIRouter()
@@ -76,6 +77,28 @@ def update_rule(id: int, rule: RuleCreate, db: Session= Depends(get_db), current
     
     try: 
         rule = user_update_rule_by_id(rule_update= rule, db = db, owner=current_user.username, id = id)
+        if rule is not None: 
+            return rule
+        code = detail_error.CODE_RECORD_NOT_FOUND
+        return  HTTPException(status_code=code, 
+                            detail = detail_error.map_err[code])
+    except: 
+        code = detail_error.CODE_CANNOT_UPDATE
+        raise HTTPException(status_code = code, 
+                            detail = detail_error.map_err[code])
+    
+
+
+
+@router.put("/belong")
+def update_rule(rule: RuleCreate, db: Session= Depends(get_db), current_user: User=Depends(get_current_user_from_token)):
+    if not current_user.is_supperuser : 
+        code = detail_error.CODE_DONT_HAVE_PERMISSIONS
+        raise HTTPException(status_code = code, 
+                            detail = detail_error.map_err[code])
+    
+    try: 
+        rule = user_update_rule_belong(rule_update= rule, db = db, owner=current_user.username, id = id)
         if rule is not None: 
             return rule
         code = detail_error.CODE_RECORD_NOT_FOUND
