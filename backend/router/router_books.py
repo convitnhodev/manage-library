@@ -5,6 +5,7 @@ from db.session import get_db
 from db.models.users import User
 from router.router_login import get_current_user_from_token
 from biz.book import user_create_books, user_list_book_by_owner, user_get_book_by_id
+from biz.book import user_list_book_borrowed_by_owner
 from biz.book import user_delete_book_by_id, user_update_book_by_id
 from schemas.common import ListReturn
 from schemas.books import DetailAddingBook
@@ -32,6 +33,18 @@ def user_list_book(
     current_user: User=Depends(get_current_user_from_token)):
     books_return, total  = user_list_book_by_owner(owner=current_user.owner, db = db, offset=offset, limit=limit)
     return ListReturn(data=books_return, total=total)
+
+
+@router.get("/borrow")
+def user_list_book_borrowed(
+    offset: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=100),
+    db: Session = Depends(get_db),
+    current_user: User=Depends(get_current_user_from_token)):
+    books_return, total  = user_list_book_borrowed_by_owner(owner=current_user.owner, db = db, offset=offset, limit=limit)
+    return ListReturn(data=books_return, total=total)
+
+
 
 
 @router.get("/{id}")
