@@ -6,6 +6,8 @@ from schemas.helper import CustomJSONEncoder
 from db.models.books import Book
 import json
 import uuid
+from typing import List
+from datetime import date, datetime
 
 
 
@@ -47,6 +49,11 @@ def get_book_by_id(id: int,owner: str, db: Session):
     book = db.query(Book).filter(Book.id == id, Book.owner == owner).first()
     return book
 
+# adding 
+def get_books_by_ids(ids: List[int], owner: str, db: Session):
+    books = db.query(Book).filter(Book.id.in_(ids), Book.owner == owner).all()
+    return books 
+
 
 def delete_book_by_id(id: int, owner: str, db: Session) -> Book:
     book = db.query(Book).filter(Book.id == id, Book.owner == owner).first()
@@ -84,3 +91,19 @@ def update_book_amount_borrowed(id: int, amount: int, owner: str, db: Session):
     db.commit()
     db.refresh(book)
     return book
+
+
+def update_books_amount_borrowed(ids: List[int], amount: int, owner: str, db: Session, date_return: date, date_must_return: date, is_return: bool): 
+    books = db.query(Book).filter(Book.id.in_(ids), Book.owner == owner).all()
+    
+    
+    for book in books:
+        book.amount_borrowed += amount
+        book.date_return = date_return
+        book.date_must_return = date_must_return
+        book.date_borrowed = datetime.now()
+        book.is_return = is_return
+
+    db.commit()
+    
+    return books

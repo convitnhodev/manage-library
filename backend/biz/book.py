@@ -43,7 +43,7 @@ def user_create_books(book_create: BookCreate, db:Session, owner: str):
         
     for check in result_check: 
         if check != detail_error.CODE_VALID: 
-            return result_check
+            raise result_check
     
 
     # add after checking 

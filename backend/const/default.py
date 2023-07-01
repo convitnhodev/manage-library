@@ -26,3 +26,7 @@ ACTION_DETELE_LIBRARY_FORM = "delete_library_form"
 ACTION_CREATE_RULE = "create_rule"
 ACTION_UPDATE_RULE = "update_rule"
 ACTION_DELETE_RULE = "delete_rule"
+
+
+ACTION_BORROW_BOOK = "borrow_book"
+ACTION_RETURN_BOOK = "return_book"

@@ -20,7 +20,7 @@ def create_new_book(book: BookCreate, db: Session= Depends(get_db), current_user
         return result
 
     except Exception as e:  
-        code = detail_error.CODE_ERROR_COMOM
+        code = detail_error.CODE_CANNOT_CREATE
         raise HTTPException(status_code = code, 
                             detail = detail_error.map_err[code])
     
