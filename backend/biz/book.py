@@ -9,6 +9,7 @@ from db.repository.books import get_book_by_id
 from db.repository.books import delete_book_by_id
 from db.repository.rules import list_rule_by_owner
 from db.repository.books import update_book_by_id
+from db.repository.books import list_book_borrow
 from schemas.helper import object_as_dict
 from const import detail_error 
 from datetime import date, datetime, timedelta
@@ -81,6 +82,9 @@ def user_list_book_by_owner(owner: str, db: Session,offset: int = 0, limit: int 
     # model_book.detail_adding_book = json.loads(book)
     return books, total 
 
+
+def user_list_book_borrow(owner: str, db: Session): 
+    return list_book_borrow(owner, db)
 
 def user_list_book_borrowed_by_owner(owner: str, db: Session,offset: int = 0, limit: int = 100):
     books, total  = list_books_borred_by_owner(owner = owner, db = db, offset = offset,limit = limit)

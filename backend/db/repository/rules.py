@@ -43,6 +43,7 @@ def update_rule_by_owner_and_id(owner: str, id: int, rule: RuleBase, db: Session
         existing_rule.max_day_borrow = rule.max_day_borrow
         existing_rule.max_items_borrow = rule.max_items_borrow
         existing_rule.created_at = rule.created_at
+        existing_rule.distance_year = rule.distance_year
         db.commit()
         db.refresh(existing_rule)
         return existing_rule
