@@ -110,3 +110,8 @@ def update_books_amount_borrowed(ids: List[int], amount: int, owner: str, db: Se
     db.commit()
     
     return books
+
+
+def list_book_borrow(owner: str, db: Session): 
+    books = db.query(Book).filter(Book.owner == owner, Book.is_return == False).all()
+    return books 
