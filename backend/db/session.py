@@ -20,4 +20,4 @@ def get_db() -> Generator:
         yield db 
 
     finally: 
-        db.close()
+        print(db)
