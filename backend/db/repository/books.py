@@ -106,10 +106,6 @@ def update_books_amount_borrowed(ids: List[int], amount: int, owner: str, db: Se
         book.date_must_return = date_must_return
         book.date_borrowed = datetime.now()
         book.is_return = is_return
-        # chi dung khi tra het 
-        if book.amount_borrowed == 0: 
-            book.is_return = False
-
 
     db.commit()
     
