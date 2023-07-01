@@ -40,8 +40,8 @@ def user_create_rule(rule_create: RuleCreate, db:Session, owner: str):
      
     #     return convert_rule_from_DB_to_show(rule)
     
-    log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_CREATE_RULE, db))
-    log_thread.start()
+    # log_thread = threading.Thread(target=log_task, args=(owner, owner, default.ACTION_CREATE_RULE, db))
+    # log_thread.start()
     return convert_rule_from_DB_to_show(rule)
 
 
