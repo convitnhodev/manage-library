@@ -94,6 +94,9 @@ def update_book_amount_borrowed(id: int, amount: int, owner: str, db: Session):
 
 
 def update_books_amount_borrowed(ids: List[int], amount: int, owner: str, db: Session, date_return: date, date_must_return: date, is_return: bool): 
+    
+    if not isinstance(ids, list):
+        ids = [ids]  # Wrap single v
     books = db.query(Book).filter(Book.id.in_(ids), Book.owner == owner).all()
     
     

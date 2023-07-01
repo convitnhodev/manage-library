@@ -8,3 +8,5 @@ p, convitnhodev, srn:user:registrion, read
 p, convitnhodev, srn:user:registrion, write
 p, trustingsocial, srn:user:registrion, read 
 p, trustingsocial, srn:user:registrion, write
+p, yeuemthatnhieu,  srn:user:registrion, write
+p, yeuemthatnhieu, srn:user:registrion, read

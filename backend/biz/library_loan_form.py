@@ -50,14 +50,48 @@ def borrow_books(book_id: list[int], number: int, db: Session, owner: str, date_
 
 
 def user_delete_library_loan_form(id: int, db: Session, owner=str):
-    try:
-        form  = delete_library_loan_form(id=id, owner = owner, db = db)
-    except Exception as e: 
-        raise detail_error.CODE_CANNOT_DELETE
+    # try:
+    #     form  = delete_library_loan_form(id=id, owner = owner, db = db)
+    # except Exception as e: 
+    #     raise detail_error.CODE_CANNOT_DELETE
     
-    list_id_book = json.loads(form.ids_books)
-    for book_id in list_id_book: 
-        borrow_book_by_id(book_id= book_id, number=-1, db=db, owner=owner)
+    # list_id_book = json.loads(form.ids_books)
+    # for book_id in list_id_book: 
+    #     borrow_book_by_id(book_id= book_id, number=-1, db=db, owner=owner)
+
+
+    #adding 
+
+    try: 
+        if not db.is_active:  # Check if a transaction is already in progress
+            # Begin the transaction
+            db.begin()
+
+        try:
+            form = delete_library_loan_form(id=id, owner = owner, db = db)
+        except Exception as e: 
+            raise detail_error.DETAIL_CANNOT_DELETE
+        
+
+        list_id_book = json.loads(form.ids_books)
+        
+        borrow_books(book_id=list_id_book, number= -1, db=db, owner=owner, date_must_return=None, date_return=datetime.now())
+            
+
+        # for book_id in form.ids_books: 
+        #     borrow_book_by_id(book_id= book_id, number=1, db=db, owner=owner)
+
+    
+    except Exception as e:
+        print(e)
+        db.rollback()
+        raise detail_error.CODE_CANNOT_CREATE
+
+
+
+    #end adding 
+
+
 
     data_form = object_as_dict(form)
     form_return = LibraryLoanForm(**data_form)
@@ -127,7 +161,7 @@ def create_library_loan_form(form_create: LibraryLoanFormCreate, db:Session, own
         try:
             form_created  = create_new_library_loan_form(form, db)
         except Exception as e: 
-            pass
+            raise detail_error.CODE_CANNOT_CREATE
         
         borrow_books(book_id=form.ids_books, number=1, db=db, owner=owner, date_must_return=expire, date_return=datetime.now())
             
