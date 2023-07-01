@@ -10,6 +10,7 @@ from biz.book import user_delete_book_by_id, user_update_book_by_id
 from biz.book import user_list_book_borrow
 from schemas.common import ListReturn
 from schemas.books import DetailAddingBook
+from datetime import datetime
 
 from const import detail_error 
 
@@ -47,9 +48,9 @@ def user_list_book_borrowed(
 
 
 @router.get("borrow-current")
-def user_list_book_current_borrowd(db: Session = Depends(get_db), 
+def user_list_book_current_borrowd(db: Session = Depends(get_db), start: datetime = None, end: datetime = None,
                                      current_user: User=Depends(get_current_user_from_token)):
-    books = user_list_book_borrow(owner=current_user.owner, db=db)
+    books = user_list_book_borrow(owner=current_user.owner, db=db, start_time= start, end_time=end)
     return books
 
 
