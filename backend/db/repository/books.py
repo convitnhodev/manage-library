@@ -106,12 +106,23 @@ def update_books_amount_borrowed(ids: List[int], amount: int, owner: str, db: Se
         book.date_must_return = date_must_return
         book.date_borrowed = datetime.now()
         book.is_return = is_return
+        # chi dung khi tra het 
+        if book.amount_borrowed == 0: 
+            book.is_return = False
+
 
     db.commit()
     
     return books
 
 
-def list_book_borrow(owner: str, db: Session): 
-    books = db.query(Book).filter(Book.owner == owner, Book.is_return == False).all()
+def list_book_borrow(owner: str, db: Session, start_time: datetime = None, end_time: datetime = None): 
+    query = db.query(Book).filter(Book.owner == owner, Book.is_return == False)
+    
+    if start_time is not None:
+        query = query.filter(Book.date_borrowed >= start_time)
+    if end_time is not None:
+        query = query.filter(Book.date_borrowed <= end_time)
+
+    books = query.all()
     return books 

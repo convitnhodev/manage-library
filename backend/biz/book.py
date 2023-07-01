@@ -83,8 +83,8 @@ def user_list_book_by_owner(owner: str, db: Session,offset: int = 0, limit: int 
     return books, total 
 
 
-def user_list_book_borrow(owner: str, db: Session): 
-    return list_book_borrow(owner, db)
+def user_list_book_borrow(owner: str, db: Session,start_time: datetime = None, end_time: datetime = None):
+    return list_book_borrow(owner=owner, db=db, start_time=start_time, end_time=end_time)
 
 def user_list_book_borrowed_by_owner(owner: str, db: Session,offset: int = 0, limit: int = 100):
     books, total  = list_books_borred_by_owner(owner = owner, db = db, offset = offset,limit = limit)
