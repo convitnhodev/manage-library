@@ -16,6 +16,14 @@ class Book(Base):
     updated_by = Column(String(50), nullable=True)
     numbers = Column(Integer, nullable=True)
     amount_borrowed = Column(Integer, nullable=True, default=0)
+    date_borrowed = Column(Date, nullable=True)
+    date_return = Column(Date, nullable=True) 
+    date_must_return = Column(Date, nullable=True)
+
+    is_return = Column(Boolean, nullable=True, default = False)
+
+
+    
     #detail_adding_book = Column(JSON, nullable=True)
 
     

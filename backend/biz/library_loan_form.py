@@ -3,12 +3,14 @@ from db.models.library_loan_form import LibraryLoanForm
 import json
 from datetime import date, datetime, timedelta
 from sqlalchemy.orm import Session
-from db.repository.library_loan_form import create_new_library_loan_form, get_library_load_form_by_id_and_owner
+from db.repository.library_loan_form import create_new_library_loan_form
+from db.repository.library_loan_form import get_library_load_form_by_id_and_owner
 from db.repository.library_loan_form import list_library_loan_form_by_owner
 from db.repository.library_loan_form import delete_library_loan_form
+from db.repository.books import get_books_by_ids
 from db.repository.books import  get_book_by_id
 from schemas.helper import object_as_dict
-from db.repository.books import update_book_amount_borrowed
+from db.repository.books import update_book_amount_borrowed, update_books_amount_borrowed
 from db.repository.rules import list_rule_by_owner
 from const import detail_error, default
 from db.repository.logs import create_log
@@ -23,7 +25,29 @@ def check_number_of_book(book_id:int, number: int, db:Session, owner: str):
 
 def borrow_book_by_id(book_id: int, number: int, db: Session, owner: str):
     book = update_book_amount_borrowed(id=book_id, amount=number, owner=owner, db=db)
+    if number > 0:
+        action = default.ACTION_BORROW_BOOK
+    else:
+        action = default.ACTION_RETURN_BOOK
+    
+    log_thread = threading.Thread(target=log_task, args=(owner, book_id, action, db))
+    log_thread.start()
     return book
+
+
+
+# adding 
+def borrow_books(book_id: list[int], number: int, db: Session, owner: str, date_return: date, date_must_return: date): 
+    if number > 0 : 
+        books = update_books_amount_borrowed(ids=book_id, db=db, owner=owner, amount=number, date_must_return=date_must_return, date_return=date_return, is_return=False)
+        return books 
+    
+    return update_books_amount_borrowed(ids=book_id, db=db, owner=owner, amount=number, date_must_return=date_must_return, date_return=date_return, is_return=True)
+
+
+
+
+
 
 def user_delete_library_loan_form(id: int, db: Session, owner=str):
     try:
@@ -65,7 +89,10 @@ def create_library_loan_form(form_create: LibraryLoanFormCreate, db:Session, own
         ids_books = form_create.ids_books
     )
 
-    rules = list_rule_by_owner(owner, db)
+    try: 
+        rules = list_rule_by_owner(owner, db)
+    except: 
+        raise detail_error.CODE_CANNOT_CREATE
     if len(rules) == 0:
         rule = None
     else :
@@ -81,17 +108,40 @@ def create_library_loan_form(form_create: LibraryLoanFormCreate, db:Session, own
     expire = form_create.created_at + timedelta(days=max_day_borrow)
     form.expires_at = expire
 
-    try:
-        form_created  = create_new_library_loan_form(form, db)
-    except Exception as e: 
+    books = get_books_by_ids(ids = form_create.ids_books, owner = owner, db = db)
+    if len(books) != len(form_create.ids_books):
         raise detail_error.CODE_CANNOT_CREATE
-        
+    
 
-    for book_id in form.ids_books: 
-        borrow_book_by_id(book_id= book_id, number=1, db=db, owner=owner)
-    data_form = object_as_dict(form_created)
-    form_return = LibraryLoanForm(**data_form)
-    form_return.ids_books = json.loads(form_created.ids_books)
+    # check valid of book 
+    for book in books:
+        if book.numbers <= book.amount_borrowed:
+            raise detail_error.CODE_CANNOT_CREATE
+        
+    
+    try: 
+        if not db.is_active:  # Check if a transaction is already in progress
+            # Begin the transaction
+            db.begin()
+
+        try:
+            form_created  = create_new_library_loan_form(form, db)
+        except Exception as e: 
+            pass
+        
+        borrow_books(book_id=form.ids_books, number=1, db=db, owner=owner, date_must_return=expire, date_return=datetime.now())
+            
+
+        # for book_id in form.ids_books: 
+        #     borrow_book_by_id(book_id= book_id, number=1, db=db, owner=owner)
+
+        data_form = object_as_dict(form_created)
+        form_return = LibraryLoanForm(**data_form)
+        form_return.ids_books = json.loads(form_created.ids_books)
+    except Exception as e:
+        print(e)
+        db.rollback()
+        raise detail_error.CODE_CANNOT_CREATE
 
 
     # try: 
