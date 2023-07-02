@@ -34,6 +34,7 @@ class BookService {
       year_of_publication: data.publicCationYear,
       publisher: data.publisher,
       numbers: data.numberOfCopies,
+      amount_borrowed: data.numberOfBorrowedCopies,
     };
     const response = await http.put(`books/${id}`, payload);
     return response.data;

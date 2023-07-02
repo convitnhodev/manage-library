@@ -53,6 +53,7 @@ class BookStore {
         publisher: result[0].publisher,
         importDate: dayjs(result[0].created_at),
       };
+      this.booksData.push(data);
       return data;
     } catch (error) {
       console.error('Error creating new member:', error);
@@ -74,6 +75,12 @@ class BookStore {
         publisher: result.publisher,
         importDate: dayjs(result.created_at),
       };
+      this.booksData = this.booksData.map(book => {
+        if (book.id === data.id) {
+          return data;
+        }
+        return book;
+      });
       return data;
     } catch (error) {
       console.error('Error updating member:', error);
@@ -83,6 +90,7 @@ class BookStore {
   @action deleteBook = async (id: number) => {
     try {
       const result = await bookService.deleteBook(id);
+      this.booksData = this.booksData.filter(book => book.id !== id);
       return result;
     } catch (error) {
       console.error('Error deleting member:', error);

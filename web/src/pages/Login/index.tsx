@@ -17,7 +17,7 @@ const LoginPage = () => {
         token: res.access_token,
         expiresIn: res.expiresIn,
         tokenType: res.token_type,
-        authState: res.name,
+        authState: res.username,
       });
 
       if (signInResult) {

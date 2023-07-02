@@ -49,8 +49,8 @@ const Books: React.FC = ({ bookStore, ruleStore }: IBooksProps) => {
   };
 
   useEffect(() => {
-    bookStore?.booksData.length ? setBooksLoading(false) : getAllBooks();
-  }, [bookStore]);
+    getAllBooks();
+  }, []);
 
   useEffect(() => {
     setBooksData(bookStore?.booksData);
@@ -147,10 +147,7 @@ const Books: React.FC = ({ bookStore, ruleStore }: IBooksProps) => {
         publisher: values.publisher,
         importDate: values.importDate?.toDate(),
       };
-      const new_book = await bookStore?.createNewBook(newBook);
-      if (new_book) {
-        setBooksData(booksData ? [...booksData, new_book] : [new_book]);
-      }
+      await bookStore?.createNewBook(newBook);
 
       newBookForm.resetFields();
       setIsModalVisible(false);
@@ -166,6 +163,7 @@ const Books: React.FC = ({ bookStore, ruleStore }: IBooksProps) => {
         category: values.category,
         author: values.author,
         numberOfCopies: values.numberOfCopies,
+        numberOfBorrowedCopies: selectedBook.numberOfBorrowedCopies,
         publicCationYear: values.publicationYear?.year(),
         publisher: values.publisher,
         importDate: values.importDate?.toDate(),
@@ -280,7 +278,7 @@ const Books: React.FC = ({ bookStore, ruleStore }: IBooksProps) => {
               rules={[{ required: true, message: 'Vui lòng nhập thể loại sách' }]}
             >
               <Select placeholder="Thể loại" allowClear>
-                {ruleStore?.ruleData?.categoryBooks?.map((cat: string) => (
+                {ruleStore?.ruleData?.detail_category?.map((cat: string) => (
                   <Select.Option key={cat} value={cat}>
                     {cat}
                   </Select.Option>

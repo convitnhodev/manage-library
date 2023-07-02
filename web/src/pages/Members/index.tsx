@@ -11,6 +11,7 @@ import {
   Space,
   Table,
   Typography,
+  notification,
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import '@/assets/scss/pages/members.scss';
@@ -46,8 +47,8 @@ const Members: React.FC = ({ memberStore }: IMembersProps) => {
   };
 
   useEffect(() => {
-    memberStore?.memberData?.length ? setMembersLoading(false) : getAllMembers();
-  }, [memberStore]);
+    getAllMembers();
+  }, []);
 
   useEffect(() => {
     setMembersData(memberStore?.memberData);
@@ -55,7 +56,7 @@ const Members: React.FC = ({ memberStore }: IMembersProps) => {
 
   const columns = [
     {
-      title: 'STT',
+      title: 'Mã độc giả',
       dataIndex: 'id',
       key: 'id',
     },
@@ -133,8 +134,16 @@ const Members: React.FC = ({ memberStore }: IMembersProps) => {
         email: values.email,
         created_at: values.created_at?.toDate(),
       };
-      const new_member = await memberStore?.createNewMember(newMember);
-      setMembersData(membersData ? [...membersData, new_member] : [new_member]);
+      const result = await memberStore?.createNewMember(newMember);
+      if (result.status_code && result.status_code === 422) {
+        notification.destroy('ageError');
+        notification.error({
+          key: 'ageError',
+          message: 'Tuổi không hợp lệ',
+          description: 'Tuổi không hợp lệ, vui lòng kiểm tra quy định về tuổi của độc giả',
+          duration: 5,
+        });
+      }
       newMemberForm.resetFields();
       setIsModalVisible(false);
     });
@@ -152,17 +161,17 @@ const Members: React.FC = ({ memberStore }: IMembersProps) => {
         email: values.email,
         created_at: selectedMember.created_at,
       };
-      let updatedMembersData: IMember[] | undefined;
-      const memberUpdated = await memberStore?.updateMember(updatedMember);
-      if (membersData) {
-        updatedMembersData = membersData.map(member => {
-          if (member.id === memberUpdated.id) {
-            return memberUpdated;
-          }
-          return member;
-        });
-        setMembersData(updatedMembersData);
-      }
+      // let updatedMembersData: IMember[] | undefined;
+      await memberStore?.updateMember(updatedMember);
+      // if (membersData) {
+      //   updatedMembersData = membersData.map(member => {
+      //     if (member.id === memberUpdated.id) {
+      //       return memberUpdated;
+      //     }
+      //     return member;
+      //   });
+      //   setMembersData(updatedMembersData);
+      // }
       newMemberForm.resetFields();
       setIsModalVisible(false);
     });

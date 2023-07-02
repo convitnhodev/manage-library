@@ -3,14 +3,20 @@ import AppLayout from '@/pages/layout/appLayout';
 import { IRoute, appRouters, authRouter } from '@/routes/route.config';
 import AuthLayout from '@/pages/layout/authLayout';
 import PrivateRoute from './PrivateRoute';
+import { Provider } from 'mobx-react';
+import initializeStores from '@/store/initializeStore';
+
+const stores = initializeStores();
 
 export default [
   {
     path: '/',
     element: (
-      <PrivateRoute loginPath="/auth/login">
-        <AppLayout />
-      </PrivateRoute>
+      <Provider {...stores}>
+        <PrivateRoute loginPath="/auth/login">
+          <AppLayout />
+        </PrivateRoute>
+      </Provider>
     ),
     children: appRouters.map((route: IRoute) => {
       return {

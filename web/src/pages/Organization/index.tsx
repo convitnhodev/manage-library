@@ -1,19 +1,22 @@
 import { Button, Card, DatePicker, Form, Input, Modal, Pagination, Popconfirm, Space, Table, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import '@/assets/scss/pages/organization.scss';
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined, FundViewOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { inject } from 'mobx-react';
 import Stores from '@/store';
 import OrganizationStore, { IUser } from '@/store/organizationStore';
+import { useAuthUser } from 'react-auth-kit';
+import RuleStore from '@/store/ruleStore';
 
 const { Search } = Input;
 
 interface IOrganizationProps {
   organizationStore?: OrganizationStore;
+  ruleStore?: RuleStore;
 }
 
-const Organization: React.FC = ({ organizationStore }: IOrganizationProps) => {
+const Organization: React.FC = ({ organizationStore, ruleStore }: IOrganizationProps) => {
   const [usersData, setUsersData] = useState<IUser[]>();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -21,6 +24,12 @@ const Organization: React.FC = ({ organizationStore }: IOrganizationProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [organizationLoading, setOrganizationLoading] = useState(true);
+  const auth = useAuthUser();
+  const user: any = auth();
+
+  if (user !== null && user !== ruleStore?.owner) {
+    return <Typography.Title level={2}>Bạn không phải là Admin</Typography.Title>;
+  }
 
   const getAll = async () => {
     try {
@@ -33,8 +42,8 @@ const Organization: React.FC = ({ organizationStore }: IOrganizationProps) => {
   };
 
   useEffect(() => {
-    organizationStore?.organizationData.length ? setOrganizationLoading(false) : getAll();
-  }, [organizationStore]);
+    getAll();
+  }, []);
 
   useEffect(() => {
     setUsersData(organizationStore?.organizationData);
@@ -53,8 +62,8 @@ const Organization: React.FC = ({ organizationStore }: IOrganizationProps) => {
     },
     {
       title: 'Số điện thoại',
-      dataIndex: 'phone',
-      key: 'phone',
+      dataIndex: 'numberphone',
+      key: 'numberphone',
     },
     {
       title: 'Email',
@@ -75,7 +84,7 @@ const Organization: React.FC = ({ organizationStore }: IOrganizationProps) => {
         return record ? (
           <Space size="small">
             <Button type="link" onClick={() => viewUserDetails(record)}>
-              <EditOutlined />
+              <FundViewOutlined />
             </Button>
             <Popconfirm
               title="Are you sure to delete this user?"
@@ -108,9 +117,12 @@ const Organization: React.FC = ({ organizationStore }: IOrganizationProps) => {
     setCurrentPage(1); // Reset current page to 1 when performing a new search
   };
 
-  const handleDelete = (id: number) => {
-    const updatedUsersData = usersData?.filter(user => user.id !== id);
-    setUsersData(updatedUsersData);
+  const handleDelete = async (id: number) => {
+    const data = await organizationStore?.deleteUser(id);
+    if (data) {
+      const updatedUsersData = usersData?.filter(user => user.id !== id);
+      setUsersData(updatedUsersData);
+    }
   };
 
   const handleAddUser = () => {
@@ -120,12 +132,12 @@ const Organization: React.FC = ({ organizationStore }: IOrganizationProps) => {
         name: values.name,
         username: values.username,
         password: values.password,
-        birthday: values.birthday?.toDate(),
+        dob: values.birthday?.toDate(),
         address: values.address,
         email: values.email,
-        phone: values.phone,
+        numberphone: values.phone,
       };
-      setUsersData(usersData ? [...usersData, newUser] : [newUser]);
+      await organizationStore?.createUser(newUser);
       newUserForm.resetFields();
       setIsModalVisible(false);
     });
@@ -139,10 +151,10 @@ const Organization: React.FC = ({ organizationStore }: IOrganizationProps) => {
         name: values.name,
         username: values.username,
         password: values.password,
-        birthday: values.birthday?.toDate(),
+        dob: values.birthday?.toDate(),
         address: values.address,
         email: values.email,
-        phone: values.phone,
+        numberphone: values.phone,
       };
       let updatedUsersData: IUser[] | undefined;
       if (usersData) {
@@ -167,11 +179,10 @@ const Organization: React.FC = ({ organizationStore }: IOrganizationProps) => {
     newUserForm.setFieldsValue({
       name: user.name,
       username: user.username,
-      password: '',
       address: user.address,
       email: user.email,
-      birthday: user.birthday ? dayjs(user.birthday) : null,
-      phone: user.phone,
+      birthday: user.dob ? dayjs(user.dob) : null,
+      phone: user.numberphone,
     });
   };
 
@@ -195,7 +206,7 @@ const Organization: React.FC = ({ organizationStore }: IOrganizationProps) => {
       )
     : usersData;
 
-  const currentPageData = filteredData?.slice(startIndex, endIndex);
+  const currentPageData = filteredData ? filteredData?.slice(startIndex, endIndex) : [];
 
   return (
     <div className="organization">
@@ -236,8 +247,8 @@ const Organization: React.FC = ({ organizationStore }: IOrganizationProps) => {
               Hủy
             </Button>,
             selectedUser ? (
-              <Button key="edit" type="primary" onClick={handleUpdateUser}>
-                Câp nhật
+              <Button key="edit" type="primary" onClick={handleCancel}>
+                Đóng
               </Button>
             ) : (
               <Button key="add" type="primary" onClick={handleAddUser}>
@@ -261,28 +272,37 @@ const Organization: React.FC = ({ organizationStore }: IOrganizationProps) => {
             >
               <Input placeholder="Tên đăng nhập" />
             </Form.Item>
-            <Form.Item label="Mật khẩu" name="password" rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}>
-              <Input.Password type="password" placeholder="Mật khẩu" />
-            </Form.Item>
+            {!selectedUser ? (
+              <>
+                <Form.Item
+                  label="Mật khẩu"
+                  name="password"
+                  rules={[{ required: true, message: 'Vui lòng nhập mật khẩu' }]}
+                >
+                  <Input.Password type="password" placeholder="Mật khẩu" />
+                </Form.Item>
 
-            <Form.Item
-              name="confirmPassword"
-              label="Xác nhận mật khẩu"
-              dependencies={['password']}
-              rules={[
-                { required: true, message: 'Vui lòng xác nhận lại mật khẩu' },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('password') === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(new Error('Mật khẩu không khớp'));
-                  },
-                }),
-              ]}
-            >
-              <Input.Password type="password" placeholder="Xác nhận mật khẩu" />
-            </Form.Item>
+                <Form.Item
+                  label="Xác nhận mật khẩu"
+                  name="confirmPassword"
+                  dependencies={['password']}
+                  rules={[
+                    { required: true, message: 'Vui lòng xác nhận lại mật khẩu' },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('Mật khẩu không khớp'));
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password type="password" placeholder="Xác nhận mật khẩu" />
+                </Form.Item>
+              </>
+            ) : null}
+
             <Form.Item
               name="birthday"
               label="Ngày sinh"
@@ -324,4 +344,4 @@ const Organization: React.FC = ({ organizationStore }: IOrganizationProps) => {
   );
 };
 
-export default inject(Stores.OrganizationStore)(Organization);
+export default inject(Stores.OrganizationStore, Stores.RuleStore)(Organization);

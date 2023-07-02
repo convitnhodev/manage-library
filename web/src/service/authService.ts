@@ -25,8 +25,15 @@ class AuthService {
     }
   }
 
-  public async signup(): Promise<any> {
-    return;
+  public async signup(payload: any): Promise<any> {
+    try {
+      const response = await http.post('user/admin/registration', payload);
+      return response.data;
+    } catch (error) {
+      // Handle error
+      console.error(error);
+      throw error;
+    }
   }
 }
 
